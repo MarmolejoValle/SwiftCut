@@ -17,8 +17,8 @@ public class ProductController {
 
     //Crear
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> save(@RequestBody ProductDto dto){
-        return  service.save(dto.toEntity());
+    public ResponseEntity<ApiResponse> save(@ModelAttribute ProductDto dto){
+        return  service.save(dto.toEntity() ,dto.toFile());
     }
 
     //Leer

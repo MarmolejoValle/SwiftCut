@@ -32,6 +32,8 @@ public class ProductBean {
     @Column(nullable = false)
     private String quantity;
 
+    @Column()
+    private String urlPhoto;
 
 
 
