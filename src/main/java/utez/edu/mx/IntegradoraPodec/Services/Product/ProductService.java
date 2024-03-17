@@ -6,7 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
+import utez.edu.mx.IntegradoraPodec.Firebase.FirebaseInitializer;
 import utez.edu.mx.IntegradoraPodec.Model.Cards_items.CarsItemsBean;
 import utez.edu.mx.IntegradoraPodec.Model.Person.PersonBean;
 import utez.edu.mx.IntegradoraPodec.Model.Product.ProductBean;
@@ -22,6 +24,7 @@ import java.util.Optional;
 @Data
 public class ProductService {
     private final ProductRepository repository;
+    private FirebaseInitializer firebaseInitializer;
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> findById(Long id){
@@ -64,10 +67,16 @@ public class ProductService {
 
     // CREATE
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse>save(ProductBean object){
-        return new ResponseEntity<>(new ApiResponse(
-                repository.saveAndFlush(object),HttpStatus.OK,"Producto creado"),HttpStatus.OK);
-    }
+    public ResponseEntity<ApiResponse>save(ProductBean object , MultipartFile file ){
+        ProductBean optional  = repository.saveAndFlush(object) ;
+        if (optional.getName() != null){
+            object.setUrlPhoto(firebaseInitializer.upload(file));
+            return new ResponseEntity<>(new ApiResponse(optional
+                    ,HttpStatus.OK,"Producto registrado"),HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,
+                "Producto no registrado"),HttpStatus.BAD_REQUEST);}
 
     // UPDATE
     @Transactional(rollbackFor = {SQLException.class})

@@ -25,6 +25,8 @@ public class PersonBean {
     private String lastName;
     @Column(nullable = false, length = 10)
     private String phone;
+    @Column()
+    private String urlPhoto;
 
     @JsonIgnore
     @OneToOne(mappedBy = "personBean", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

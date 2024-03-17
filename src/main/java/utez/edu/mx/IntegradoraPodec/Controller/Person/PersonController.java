@@ -18,8 +18,8 @@ public class PersonController {
 
     //Crear
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> save(@RequestBody PersonDto dto){
-        return  service.save(dto.toEntity());
+    public ResponseEntity<ApiResponse> save(@ModelAttribute PersonDto dto){
+        return  service.save(dto.toEntity() ,dto.toFile());
     }
 
     //Leer
