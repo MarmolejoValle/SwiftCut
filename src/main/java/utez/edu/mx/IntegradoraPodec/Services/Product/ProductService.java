@@ -35,16 +35,23 @@ public class ProductService {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, false, "Producto no encontrado"), HttpStatus.NOT_FOUND);
         }
     }
-    //eliminar
+
+    // ELIMINAR
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse> deleteById(Long id) {
         Optional<ProductBean> opt = repository.findById(id);
-        if (opt.isPresent()){
+        if (opt.isPresent()) {
+            ProductBean product = opt.get();
+            // Elimina la imagen asociada si existe
+            if (product.getUrlPhoto() != null) {
+                firebaseInitializer.delete(product.getUrlPhoto());
+            }
             repository.deleteById(id);
-            return  new ResponseEntity<>(new ApiResponse(HttpStatus.OK, false, "Productos eliminado"), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, false, "Producto eliminado"), HttpStatus.OK);
         }
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Productos no encontrado"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Producto no encontrado"), HttpStatus.NOT_FOUND);
     }
+
 
     //SELECT * FROM
     @Transactional(readOnly = true)
@@ -68,6 +75,7 @@ public class ProductService {
     // CREATE
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse>save(ProductBean object , MultipartFile file ){
+
         ProductBean optional  = repository.saveAndFlush(object) ;
         if (optional.getName() != null){
             object.setUrlPhoto(firebaseInitializer.upload(file));
@@ -80,12 +88,22 @@ public class ProductService {
 
     // UPDATE
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse> update(ProductBean objects){
-            Optional<ProductBean>foundObject = repository.findById(objects.getId());
-        if (foundObject.isPresent())
-            return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(objects),HttpStatus.OK,"Producto actualizado"),
+    public ResponseEntity<ApiResponse> update(ProductBean object, MultipartFile file){
+        Optional<ProductBean> foundObjectOp = repository.findById(object.getId());
+        if (foundObjectOp.isPresent()){
+
+            if (file != null && !file.isEmpty()){
+                if (object.getUrlPhoto() != null){
+                    firebaseInitializer.delete(object.getUrlPhoto());
+                }
+                String imgUrl = firebaseInitializer.upload(file);
+                object.setUrlPhoto(imgUrl);
+            }
+            return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(object),HttpStatus.OK,"Producto actualizado"),
                     HttpStatus.OK);
-        return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,
-                "Producto invalido"),HttpStatus.BAD_REQUEST);
+        }else {
+            return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,
+                    "Producto invalido"), HttpStatus.BAD_REQUEST);
+        }
     }
 }

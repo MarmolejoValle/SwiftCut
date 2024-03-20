@@ -31,8 +31,8 @@ public class PersonController {
     //Actualizar
     @PutMapping("/update")
     public ResponseEntity<ApiResponse> update
-    (@RequestBody PersonDto dto){
-        return service.update(dto.toEntityId());
+    (@ModelAttribute PersonDto dto){
+        return service.update(dto.toEntityId(), dto.toFile());
     }
 
     //Leer general

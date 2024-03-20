@@ -30,8 +30,8 @@ public class ProductController {
     //Actualizar
     @PutMapping("/update")
     public ResponseEntity<ApiResponse> update
-    (@RequestBody ProductDto dto){
-        return service.update(dto.toEntityId());
+    (@ModelAttribute ProductDto dto){
+        return service.update(dto.toEntityId(), dto.toFile());
     }
 
     //Leer general

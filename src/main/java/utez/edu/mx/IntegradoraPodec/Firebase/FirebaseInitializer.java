@@ -46,7 +46,6 @@ public class FirebaseInitializer {
         storage.create(blobInfo, Files.readAllBytes(file.toPath()));
 
 
-
         String DOWNLOAD_URL = "https://firebasestorage.googleapis.com/v0/b/places-36635.appspot.com/o/%s?alt=media";
         return String.format(DOWNLOAD_URL, URLEncoder.encode(fileName, StandardCharsets.UTF_8));
     }
@@ -80,4 +79,21 @@ public class FirebaseInitializer {
         }
     }
 
+    public void delete(String imageUrl) {
+
+        // Obtén la ID del blob de la URL de la imagen
+        String bucketName = "places-36635.appspot.com"; // Nombre de tu bucket de Firebase Storage
+
+        // La URL de la imagen podría contener parámetros adicionales, por lo que necesitamos extraer solo la parte relevante
+        String blobName = imageUrl.substring(imageUrl.indexOf("./") + "./".length());
+
+        // Inicializa la conexión a Firebase Storage
+        Storage storage = StorageOptions.getDefaultInstance().getService();
+
+        // Crea la ID del blob
+        BlobId blobId = BlobId.of(bucketName, blobName);
+
+        // Elimina el blob
+        storage.delete(blobId);
+    }
 }

@@ -22,7 +22,6 @@ public class ProductDto {
         return new ProductBean(name, description,quantity);
     }
 
-
     public MultipartFile toFile(){
         return file;
     }

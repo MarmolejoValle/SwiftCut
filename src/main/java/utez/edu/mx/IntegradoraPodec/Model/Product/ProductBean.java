@@ -54,5 +54,9 @@ public class ProductBean {
     }
 
     public ProductBean(Long id, String name, String description, String quantity) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.quantity = quantity;
     }
 }
