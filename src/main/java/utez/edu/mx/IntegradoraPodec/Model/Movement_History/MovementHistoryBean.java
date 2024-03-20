@@ -8,6 +8,7 @@ import lombok.Setter;
 import utez.edu.mx.IntegradoraPodec.Model.Category.CategoryBean;
 import utez.edu.mx.IntegradoraPodec.Model.MovementType.MovementTypeBean;
 import utez.edu.mx.IntegradoraPodec.Model.Order.OrderBean;
+import utez.edu.mx.IntegradoraPodec.Model.Price_Kg.PriceKgBean;
 import utez.edu.mx.IntegradoraPodec.Model.Product.ProductBean;
 import utez.edu.mx.IntegradoraPodec.Model.ProductExtras.ProductExtrasBean;
 
@@ -35,6 +36,10 @@ public class MovementHistoryBean {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_extras_fk")
     private ProductExtrasBean productExtrasBean;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "price_kg_fk")
+    private PriceKgBean priceKgBean;
 
     public MovementHistoryBean( LocalDateTime date, Float quantity) {
         this.date = date;

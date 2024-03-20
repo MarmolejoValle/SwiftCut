@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import utez.edu.mx.IntegradoraPodec.Model.Movement_History.MovementHistoryBean;
 import utez.edu.mx.IntegradoraPodec.Model.Order.OrderBean;
 
 import java.util.Date;
@@ -33,6 +34,10 @@ public class PriceKgBean {
     @JsonIgnore
     @OneToMany(mappedBy = "priceKgBean",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<OrderBean> orderBeans;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "priceKgBean", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private Set<MovementHistoryBean> movementHistoryBeans;
 
     public PriceKgBean(Long id, Date dateStart, Date dateEnd, Float priceBuy, Float priceSale) {
         this.id = id;

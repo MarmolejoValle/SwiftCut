@@ -12,6 +12,7 @@ import utez.edu.mx.IntegradoraPodec.Firebase.FirebaseInitializer;
 import utez.edu.mx.IntegradoraPodec.Model.Cart_Shop.CarShopBean;
 import utez.edu.mx.IntegradoraPodec.Model.Person.PersonBean;
 import utez.edu.mx.IntegradoraPodec.Model.Person.PersonRepository;
+import utez.edu.mx.IntegradoraPodec.Model.Product.ProductBean;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -34,6 +35,7 @@ public class PersonService {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, false, "Persona no encontrado"), HttpStatus.NOT_FOUND);
         }
     }
+
     //eliminar
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse> deleteById(Long id) {
@@ -81,12 +83,22 @@ public class PersonService {
 
     // UPDATE
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse> update(PersonBean objects){
-        Optional<PersonBean>foundObject = repository.findById(objects.getId());
-        if (foundObject.isPresent())
-            return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(objects),HttpStatus.OK,"Persona actualizada"),
-                    HttpStatus.OK);
-        return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,
-                "Persona no encontrado"),HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiResponse> update(PersonBean object, MultipartFile file){
+        Optional<PersonBean>foundObject = repository.findById(object.getId());
+        if (foundObject.isPresent()){
+            if (file != null && !file.isEmpty()){
+                if (object.getUrlPhoto() != null){
+                    firebaseInitializer.delete(object.getUrlPhoto());
+                }
+                String imgUrl = firebaseInitializer.upload(file);
+                object.setUrlPhoto(imgUrl);
+            }
+            return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(object),HttpStatus.OK,"Persona actualizada"),
+                HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,
+                "Persona No encontrada"), HttpStatus.BAD_REQUEST);
+        }
     }
+
 }

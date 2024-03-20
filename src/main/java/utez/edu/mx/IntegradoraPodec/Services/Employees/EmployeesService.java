@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
@@ -52,6 +53,9 @@ public class EmployeesService {
     // CREATE
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse>save(EmployeesBean object){
+        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+        String encryptedPsw = bcrypt.encode(object.getPassword());
+        object.setPassword(encryptedPsw);
         return new ResponseEntity<>(new ApiResponse(
                 repository.saveAndFlush(object),HttpStatus.OK,"Empleado creado"),HttpStatus.OK);
     }
