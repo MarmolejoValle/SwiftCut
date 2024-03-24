@@ -1,11 +1,14 @@
 package utez.edu.mx.IntegradoraPodec.Controller.Employees;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
 import utez.edu.mx.IntegradoraPodec.Controller.Employees.dto.EmployeesDto;
 import utez.edu.mx.IntegradoraPodec.Services.Employees.EmployeesService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -21,9 +24,17 @@ public class EmployeesController {
     }
 
     //Leer
-    @GetMapping("/read{id}")
-    public ResponseEntity<ApiResponse> getById(@PathVariable Long id) {
-        return service.findById(id);
+    @PostMapping("/readEmployeeId")
+    public ResponseEntity<ApiResponse> getEmployee(@RequestBody EmployeesDto dto){
+       return service.getEmployeeId(dto.toEntityId().getId());
+    }
+    @PostMapping ("/countOrdens")
+    public ResponseEntity<ApiResponse> getCountOrdens (@RequestBody EmployeesDto dto) {
+        return service.getCountOrdens(dto.toEntityId().getId());
+    }
+    @PostMapping ("/Ordens")
+    public ResponseEntity<ApiResponse> getOrdens (@RequestBody EmployeesDto dto) {
+        return service.getOrdens(dto.toEntityId().getId());
     }
 
     //Actualizar

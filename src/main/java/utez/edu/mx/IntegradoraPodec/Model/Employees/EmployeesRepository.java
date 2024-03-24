@@ -1,12 +1,47 @@
 package utez.edu.mx.IntegradoraPodec.Model.Employees;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import utez.edu.mx.IntegradoraPodec.Model.Order.OrdenDto;
+import utez.edu.mx.IntegradoraPodec.Model.StatusPerson.StatusPersonBean;
 
+import java.util.List;
 import java.util.Optional;
-
 @Repository
 public interface EmployeesRepository extends JpaRepository<EmployeesBean,Long> {
     Optional<EmployeesBean> findById (Long id);
-    Optional<EmployeesBean> findByEmail (String email);
+    @Query("""
+                   SELECT new utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesDto(count(o.id) ) from EmployeesBean e inner join OrderBean o on e.id = o.employeesBean.id INNER JOIN 
+                   StatusBean s on o.statusBean.id = 1 where e.id= :id
+                   """)
+    Optional<EmployeesDto> getCountOrdens(@Param("id") Long id);
+
+    @Query("""
+                   SELECT new utez.edu.mx.IntegradoraPodec.Model.Order.OrdenDto(o.priceKgBean.priceSale , o.dateRequest) from EmployeesBean e inner join OrderBean o on e.id = o.employeesBean.id 
+                   INNER JOIN StatusBean s on o.statusBean.id = 1 
+                   INNER join PriceKgBean p on p.id = o.priceKgBean.id where e.id= :id 
+                   """)
+    List<OrdenDto> findByOrderBeansOrderById(@Param("id") Long id);
+
+    @Query("""
+                   SELECT new  utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesDto (e.id , p.name,e.email,p.lastName,r.type,p.urlPhoto,p.phone,sp.type ,p.sex)
+                  FROM PersonBean p
+                   inner join EmployeesBean e on p.id=e.personBean.id and e.id =:id
+                   inner join RolsBean r on e.rolsBean.id = r.id 
+                    inner join StatusPersonBean sp on sp.id = p.statusPersonBean.id
+                    
+                   """)
+    Optional<EmployeesDto> getEmployeeId(@Param("id") Long id);
+
+    @Query ("""  
+  SELECT new utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesDto(e.id , p.name,e.email,p.lastName,r.type,p.urlPhoto,p.phone,sp.type) FROM PersonBean p inner join EmployeesBean e on p.id=e.personBean.id inner join RolsBean r
+   on e.rolsBean.id = r.id inner join StatusPersonBean sp on sp.id = p.statusPersonBean.id""")
+    List<EmployeesDto> findAllEmployeesDto();
+
+
+
+
 }
