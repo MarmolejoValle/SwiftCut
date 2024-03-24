@@ -7,13 +7,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
 import utez.edu.mx.IntegradoraPodec.Model.Cart_Shop.CarShopBean;
 import utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesBean;
+import utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesDto;
 import utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesRepository;
+import utez.edu.mx.IntegradoraPodec.Model.Order.OrdenDto;
 import utez.edu.mx.IntegradoraPodec.Model.Product.ProductBean;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,6 +27,26 @@ import java.util.Optional;
 @Data
 public class EmployeesService {
     private final EmployeesRepository repository;
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> getEmployeeId(Long id){
+        Optional<EmployeesDto> employee = repository.getEmployeeId(id);
+        return new ResponseEntity<>(new ApiResponse(employee, HttpStatus.OK, "Empleados encontrados"), HttpStatus.OK);
+
+    }
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> getCountOrdens(Long id) {
+        Optional<EmployeesDto> countDate = repository.getCountOrdens(id);
+        return new ResponseEntity<>(new ApiResponse(countDate, HttpStatus.OK, "Empleados encontrados"), HttpStatus.OK);
+
+    }
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> getOrdens(Long id) {
+        List<OrdenDto> Ordens = repository.findByOrderBeansOrderById(id);
+        return new ResponseEntity<>(new ApiResponse(Ordens, HttpStatus.OK, "Empleados encontrados"), HttpStatus.OK);
+
+    }
+
 
     //Leer (Consulta individual)
     @Transactional(readOnly = true)
@@ -47,7 +72,7 @@ public class EmployeesService {
     //SELECT * FROM
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getAll(){
-        return new ResponseEntity<>(new ApiResponse(repository.findAll(), HttpStatus.OK,"Empleado encontrado"), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(repository.findAllEmployeesDto(), HttpStatus.OK,"Empleado encontrado"), HttpStatus.OK);
     }
 
     // CREATE
