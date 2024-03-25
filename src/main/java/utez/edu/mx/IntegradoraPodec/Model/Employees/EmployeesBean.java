@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import utez.edu.mx.IntegradoraPodec.Controller.Person.dto.PersonDto;
 import utez.edu.mx.IntegradoraPodec.Model.Order.OrderBean;
 import utez.edu.mx.IntegradoraPodec.Model.Person.PersonBean;
 import utez.edu.mx.IntegradoraPodec.Model.Rols.RolsBean;
@@ -48,4 +49,5 @@ public class EmployeesBean {
         this.email = email;
         this.password = password;
     }
+
 }

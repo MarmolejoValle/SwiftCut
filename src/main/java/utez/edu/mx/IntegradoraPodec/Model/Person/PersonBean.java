@@ -55,4 +55,10 @@ public class PersonBean {
         this.lastName = lastName;
         this.phone = phone;
     }
+    public PersonBean(String name, String lastName, String phone ,String sex) {
+        this.name = name;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.sex = sex;
+    }
 }

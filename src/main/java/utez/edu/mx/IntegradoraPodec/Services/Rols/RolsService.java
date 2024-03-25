@@ -44,7 +44,7 @@ public class RolsService {
     //SELECT * FROM
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getAll(){
-        return new ResponseEntity<>(new ApiResponse(repository.findAll(), HttpStatus.OK,"Rol encontrado"),
+        return new ResponseEntity<>(new ApiResponse(repository.readAllByIdAndType(), HttpStatus.OK,"Rol encontrado"),
                 HttpStatus.OK);
     }
 
