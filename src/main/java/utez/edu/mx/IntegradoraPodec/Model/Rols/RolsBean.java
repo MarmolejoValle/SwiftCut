@@ -34,6 +34,9 @@ public class RolsBean {
         this.type = type;
         this.description = description;
     }
+    public RolsBean(Long id) {
+        this.id = id;
+    }
 
     public RolsBean(String type, String description) {
         this.type = type;

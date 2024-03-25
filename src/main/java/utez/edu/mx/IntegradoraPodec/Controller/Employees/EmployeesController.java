@@ -1,13 +1,18 @@
 package utez.edu.mx.IntegradoraPodec.Controller.Employees;
 
+import com.google.api.client.http.HttpMediaType;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
+import utez.edu.mx.IntegradoraPodec.Controller.DtoShare.EmployeesPersonDto;
 import utez.edu.mx.IntegradoraPodec.Controller.Employees.dto.EmployeesDto;
 import utez.edu.mx.IntegradoraPodec.Services.Employees.EmployeesService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,9 +23,11 @@ public class EmployeesController {
     private final EmployeesService service;
 
     //Crear
-    @PostMapping("/add")
-    public ResponseEntity<ApiResponse> save(@RequestBody EmployeesDto dto){
-        return  service.save(dto.toEntity());
+
+    @PostMapping(value = "/add")
+    public ResponseEntity<ApiResponse> save(@ModelAttribute EmployeesPersonDto dto) throws IOException {
+
+        return  service.save(dto.toEntity(),dto.toFile());
     }
 
     //Leer

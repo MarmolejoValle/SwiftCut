@@ -17,6 +17,9 @@ public class PersonDto {
     private String lastName;
     private String phone;
     private MultipartFile file;
+    private String type;
+
+
 
 
     public PersonBean toEntity(){

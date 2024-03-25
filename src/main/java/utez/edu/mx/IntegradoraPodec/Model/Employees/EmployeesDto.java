@@ -1,12 +1,9 @@
 package utez.edu.mx.IntegradoraPodec.Model.Employees;
 
 import lombok.Data;
-import utez.edu.mx.IntegradoraPodec.Controller.Rols.dto.RolsDto;
-import utez.edu.mx.IntegradoraPodec.Model.Person.PersonBean;
 import utez.edu.mx.IntegradoraPodec.Model.Person.PersonDto;
 import utez.edu.mx.IntegradoraPodec.Model.Rols.RolDto;
 
-import java.util.Objects;
 @Data
 public final class EmployeesDto {
 

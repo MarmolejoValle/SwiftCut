@@ -9,13 +9,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
+import utez.edu.mx.IntegradoraPodec.Firebase.FirebaseInitializer;
 import utez.edu.mx.IntegradoraPodec.Model.Cart_Shop.CarShopBean;
 import utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesBean;
 import utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesDto;
 import utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Order.OrdenDto;
+import utez.edu.mx.IntegradoraPodec.Model.Person.PersonBean;
 import utez.edu.mx.IntegradoraPodec.Model.Product.ProductBean;
+import utez.edu.mx.IntegradoraPodec.Model.StatusPerson.StatusPersonBean;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -27,6 +31,8 @@ import java.util.Optional;
 @Data
 public class EmployeesService {
     private final EmployeesRepository repository;
+    private FirebaseInitializer firebaseInitializer;
+
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getEmployeeId(Long id){
@@ -77,12 +83,21 @@ public class EmployeesService {
 
     // CREATE
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse>save(EmployeesBean object){
-        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-        String encryptedPsw = bcrypt.encode(object.getPassword());
-        object.setPassword(encryptedPsw);
-        return new ResponseEntity<>(new ApiResponse(
-                repository.saveAndFlush(object),HttpStatus.OK,"Empleado creado"),HttpStatus.OK);
+    public ResponseEntity<ApiResponse>save(EmployeesBean object, MultipartFile file){
+        StatusPersonBean statusPersonBean = new StatusPersonBean();
+        statusPersonBean.setId(2L);
+        object.getPersonBean().setStatusPersonBean(statusPersonBean);
+        EmployeesBean optional  = repository.saveAndFlush(object) ;
+        if (optional.getEmail() != null){
+            object.getPersonBean().setUrlPhoto(firebaseInitializer.upload(file));
+            return new ResponseEntity<>(new ApiResponse(optional
+                    ,HttpStatus.OK,"Persona registrada"),HttpStatus.OK);
+        }
+
+
+       // repository.saveAndFlush(object)
+        return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(object)
+               ,HttpStatus.OK,"Empleado creado"),HttpStatus.OK);
     }
 
     // UPDATE
