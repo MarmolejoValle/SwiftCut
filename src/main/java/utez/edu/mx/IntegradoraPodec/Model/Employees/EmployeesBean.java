@@ -26,6 +26,11 @@ public class EmployeesBean {
     private String email;
     @Column(nullable = false)
     private String password;
+    @Column(columnDefinition = "BOOL DEFAULT true")
+    private Boolean status;
+    @Column(columnDefinition = "BOOL DEFAULT false")
+    private Boolean blocked;
+    private String token;
 
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "person_fk")

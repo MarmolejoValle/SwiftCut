@@ -13,6 +13,16 @@ import java.util.Optional;
 @Repository
 public interface EmployeesRepository extends JpaRepository<EmployeesBean,Long> {
     Optional<EmployeesBean> findById (Long id);
+    Optional<EmployeesBean> findByEmail(String username);
+    @Query("""
+                   SELECT new  utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesDto (e.id , p.name,p.lastName,r.type,p.urlPhoto)
+                  FROM PersonBean p
+                   inner join EmployeesBean e on p.id=e.personBean.id and e.email =:email
+                   inner join RolsBean r on e.rolsBean.id = r.id                     
+                   """)
+    Optional<EmployeesDto> findByInfo(@Param("email")String username);
+
+    Optional<EmployeesBean> findByEmailAndAndPassword(String email , String password);
     @Query("""
                    SELECT new utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesDto(count(o.id) ) from EmployeesBean e inner join OrderBean o on e.id = o.employeesBean.id INNER JOIN 
                    StatusBean s on o.statusBean.id = 1 where e.id= :id
