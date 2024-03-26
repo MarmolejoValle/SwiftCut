@@ -33,6 +33,16 @@ public class EmployeesPersonDto {
         employeesBean.setRolsBean(rolsBean);
         return  employeesBean;
     }
+    public EmployeesBean toEntityId ()  {
+        PersonBean personBean  = new PersonBean( name,  lastName,  phone , sex );
+        RolsBean rolsBean  = new RolsBean(rols);
+        EmployeesBean employeesBean = new EmployeesBean(id,email, password);
+        System.out.println("Id employees " + employeesBean.getId());
+
+        employeesBean.setPersonBean(personBean);
+        employeesBean.setRolsBean(rolsBean);
+        return  employeesBean;
+    }
     public MultipartFile toFile(){
         return image;
     }

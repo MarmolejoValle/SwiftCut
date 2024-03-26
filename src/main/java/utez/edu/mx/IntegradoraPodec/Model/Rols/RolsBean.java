@@ -1,5 +1,6 @@
 package utez.edu.mx.IntegradoraPodec.Model.Rols;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +24,6 @@ public class RolsBean {
     private String type;
     @Column(nullable = false)
     private String description;
-
 
 
     @OneToMany(mappedBy = "rolsBean",fetch = FetchType.LAZY,cascade = CascadeType.ALL)

@@ -18,7 +18,14 @@ public final class PersonDto {
     private final StatusPersonDto statusPersonDto;
 
 
-
+    public PersonDto(String name, String lastName,  String urlPhoto ) {
+        this.name = name;
+        this.lastName = lastName;
+        this.urlPhoto = urlPhoto;
+        statusPersonDto = null;
+        sex = null;
+        phone = null;
+    }
 
     public PersonDto(String name, String lastName, String type, String urlPhoto , String phone,String sex) {
         this.name = name;

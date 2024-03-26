@@ -29,6 +29,14 @@ public final class EmployeesDto {
         this.count = null;
     }
 
+    public EmployeesDto(Long id , String name, String lastname, String type, String urlPhoto ) {
+        this.id = id;
+        this.personDto = new PersonDto(name,lastname,urlPhoto);
+        this.rolDto = new RolDto(type);
+        this.count = null;
+        email = null;
+    }
+
     public EmployeesDto(Long id , String name,  String email,String lastname,String type, String urlPhoto , String phone, String status,String sex) {
         this.id = id;
         this.email = email;
@@ -36,6 +44,7 @@ public final class EmployeesDto {
         this.rolDto = new RolDto(type);
         this.count = null;
     }
+
     public long id() {
         return id;
     }

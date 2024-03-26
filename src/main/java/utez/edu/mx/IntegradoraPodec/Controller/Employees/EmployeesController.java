@@ -35,6 +35,10 @@ public class EmployeesController {
     public ResponseEntity<ApiResponse> getEmployee(@RequestBody EmployeesDto dto){
        return service.getEmployeeId(dto.toEntityId().getId());
     }
+    @PostMapping("/info")
+    public ResponseEntity<ApiResponse> getEmployeeEmail(@RequestBody EmployeesDto dto){
+        return service.getEmployeeEmail(dto.toEntityId().getEmail());
+    }
     @PostMapping ("/countOrdens")
     public ResponseEntity<ApiResponse> getCountOrdens (@RequestBody EmployeesDto dto) {
         return service.getCountOrdens(dto.toEntityId().getId());
@@ -45,10 +49,10 @@ public class EmployeesController {
     }
 
     //Actualizar
-    @PutMapping("/update")
-    public ResponseEntity<ApiResponse> update
-    (@RequestBody EmployeesDto dto){
-        return service.update(dto.toEntityId());
+    @PutMapping(value = "/update")
+    public ResponseEntity<ApiResponse> update(@ModelAttribute EmployeesPersonDto dto) throws IOException {
+
+        return  service.update(dto.toEntityId(),dto.toFile());
     }
 
     //Leer general

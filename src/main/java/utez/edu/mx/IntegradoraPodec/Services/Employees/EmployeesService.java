@@ -19,6 +19,8 @@ import utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Order.OrdenDto;
 import utez.edu.mx.IntegradoraPodec.Model.Person.PersonBean;
 import utez.edu.mx.IntegradoraPodec.Model.Product.ProductBean;
+import utez.edu.mx.IntegradoraPodec.Model.Rols.RolsBean;
+import utez.edu.mx.IntegradoraPodec.Model.Rols.RolsRepository;
 import utez.edu.mx.IntegradoraPodec.Model.StatusPerson.StatusPersonBean;
 
 import java.sql.SQLException;
@@ -32,11 +34,18 @@ import java.util.Optional;
 public class EmployeesService {
     private final EmployeesRepository repository;
     private FirebaseInitializer firebaseInitializer;
+    private final RolsRepository rolsRepository;
 
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getEmployeeId(Long id){
         Optional<EmployeesDto> employee = repository.getEmployeeId(id);
+        return new ResponseEntity<>(new ApiResponse(employee, HttpStatus.OK, "Empleados encontrados"), HttpStatus.OK);
+
+    }
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> getEmployeeEmail(String email){
+        Optional<EmployeesDto> employee = repository.findByInfo(email);
         return new ResponseEntity<>(new ApiResponse(employee, HttpStatus.OK, "Empleados encontrados"), HttpStatus.OK);
 
     }
@@ -87,6 +96,11 @@ public class EmployeesService {
         StatusPersonBean statusPersonBean = new StatusPersonBean();
         statusPersonBean.setId(2L);
         object.getPersonBean().setStatusPersonBean(statusPersonBean);
+
+        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+        String encryptedPsw = bcrypt.encode(object.getPassword());
+        object.setPassword(encryptedPsw);
+
         EmployeesBean optional  = repository.saveAndFlush(object) ;
         if (optional.getEmail() != null){
             object.getPersonBean().setUrlPhoto(firebaseInitializer.upload(file));
@@ -101,11 +115,45 @@ public class EmployeesService {
     }
 
     // UPDATE
+
     @Transactional(rollbackFor = {SQLException.class})
-        public ResponseEntity<ApiResponse> update(EmployeesBean objects){
-        Optional<EmployeesBean>foundObject = repository.findById(objects.getId());
-        if (foundObject.isPresent())
-            return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(objects),HttpStatus.OK,"Empleado actualizado"), HttpStatus.OK);
-        return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true, "Empleado no encontrado"),HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiResponse>update(EmployeesBean object, MultipartFile file){
+        Optional<EmployeesBean>foundObject = repository.findById(object.getId());
+        if (!foundObject.isPresent())
+            return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true, "Empleado no encontrado"),HttpStatus.BAD_REQUEST);
+
+
+
+        if (object.getPersonBean().getName() != null )  foundObject.get().getPersonBean().setName(object.getPersonBean().getName());
+        if (object.getPersonBean().getPhone() != null )  foundObject.get().getPersonBean().setPhone(object.getPersonBean().getPhone());
+        if (object.getPersonBean().getSex() != null )  foundObject.get().getPersonBean().setSex(object.getPersonBean().getSex());
+        if (object.getEmail() != null )  foundObject.get().setEmail(object.getEmail());
+        if (object.getPersonBean().getLastName() != null )  foundObject.get().getPersonBean().setLastName(object.getPersonBean().getLastName());
+        if (object.getRolsBean().getId() != null )  {
+            System.out.println("Id " + object.getRolsBean().getId());
+            Optional<RolsBean> rolsBean = rolsRepository.findById(object.getRolsBean().getId());
+            foundObject.get().setRolsBean(rolsBean.get());
+        }
+
+
+
+        if (object.getPassword() !=null){
+            BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+            String encryptedPsw = bcrypt.encode(object.getPassword());
+            object.setPassword(encryptedPsw);
+        }
+
+
+        if (file != null)
+            foundObject.get().getPersonBean().setUrlPhoto(firebaseInitializer.upload(file));
+
+
+        repository.saveAndFlush(foundObject.get());
+        // repository.saveAndFlush(object)
+        return new ResponseEntity<>(new ApiResponse(""
+                ,HttpStatus.OK,"Empleado Actualizado"),HttpStatus.OK);
     }
+
+
+
 }
