@@ -8,14 +8,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
+import utez.edu.mx.IntegradoraPodec.Controller.DtoShare.CategoryProductsDto;
 import utez.edu.mx.IntegradoraPodec.Firebase.FirebaseInitializer;
 import utez.edu.mx.IntegradoraPodec.Model.Cards_items.CarsItemsBean;
+import utez.edu.mx.IntegradoraPodec.Model.Category.CategoryBean;
+import utez.edu.mx.IntegradoraPodec.Model.Category.CategoryRepository;
+import utez.edu.mx.IntegradoraPodec.Model.Extras.ExtrasBean;
 import utez.edu.mx.IntegradoraPodec.Model.Person.PersonBean;
 import utez.edu.mx.IntegradoraPodec.Model.Product.ProductBean;
 import utez.edu.mx.IntegradoraPodec.Model.Product.ProductRepository;
+import utez.edu.mx.IntegradoraPodec.Model.ProductExtras.ProductExtrasBean;
+import utez.edu.mx.IntegradoraPodec.Model.ProductExtras.ProductExtrasRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Rols.RolsBean;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,16 +31,27 @@ import java.util.Optional;
 @Data
 public class ProductService {
     private final ProductRepository repository;
+    private final CategoryRepository categoryRepository;
+    private final ProductExtrasRepository productExtrasRepository;
     private FirebaseInitializer firebaseInitializer;
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> findById(Long id){
-        Optional<ProductBean> object = repository.findById(id);
+        System.out.println("Id prodcuto : " + id);
+        Optional<ProductBean> object = repository.findByIdFast(id);
         if (object.isPresent()) {
             return new ResponseEntity<>(new ApiResponse(object.get(), HttpStatus.OK, "Producto  encontrado"), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, false, "Producto no encontrado"), HttpStatus.NOT_FOUND);
         }
+    }
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> findByProductForCategory(Long id){
+        List<CategoryProductsDto> object = repository.findByProductForCategory(id);
+
+            return new ResponseEntity<>(new ApiResponse(object, HttpStatus.OK, "Productos  encontrado"), HttpStatus.OK);
+
+
     }
 
     // ELIMINAR
@@ -63,9 +81,9 @@ public class ProductService {
     // SELECT * FROM WHERE ID
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getId(ProductBean object){
-        Optional<ProductBean> foundObject = repository.findById(object.getId());
+        Optional<ProductBean> foundObject = repository.findByIdFast(object.getId());
         if(foundObject.isPresent())
-            return new ResponseEntity<>(new ApiResponse(repository.findById(object.getId()),HttpStatus.OK,
+            return new ResponseEntity<>(new ApiResponse(foundObject.get(),HttpStatus.OK,
                     "Producto encontrado"),
                     HttpStatus.OK);
         return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,
@@ -74,11 +92,23 @@ public class ProductService {
 
     // CREATE
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse>save(ProductBean object , MultipartFile file ){
+    public ResponseEntity<ApiResponse>save(ProductBean object , MultipartFile file,Long id ){
+            CategoryBean categoryBean = new CategoryBean();
+            categoryBean.setId(id);
 
+        ExtrasBean extrasBean = new ExtrasBean();
+        extrasBean.setId(2L);
+
+        ProductExtrasBean productExtrasBean = new ProductExtrasBean();
+        productExtrasBean.setExtrasBean(extrasBean);
+        productExtrasBean.setProductBean(object);
+
+        object.setCategoryBean(categoryBean);
+            object.setQuantity(0L);
         ProductBean optional  = repository.saveAndFlush(object) ;
         if (optional.getName() != null){
             object.setUrlPhoto(firebaseInitializer.upload(file));
+            productExtrasRepository.save(productExtrasBean);
             return new ResponseEntity<>(new ApiResponse(optional
                     ,HttpStatus.OK,"Producto registrado"),HttpStatus.OK);
         }
@@ -91,15 +121,30 @@ public class ProductService {
     public ResponseEntity<ApiResponse> update(ProductBean object, MultipartFile file){
         Optional<ProductBean> foundObjectOp = repository.findById(object.getId());
         if (foundObjectOp.isPresent()){
+            foundObjectOp.get().setName(object.getName());
+            foundObjectOp.get().setDescription(object.getDescription());
 
-            if (file != null && !file.isEmpty()){
-                if (object.getUrlPhoto() != null){
-                    firebaseInitializer.delete(object.getUrlPhoto());
-                }
-                String imgUrl = firebaseInitializer.upload(file);
-                object.setUrlPhoto(imgUrl);
-            }
-            return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(object),HttpStatus.OK,"Producto actualizado"),
+
+            if (file != null)
+                foundObjectOp.get().setUrlPhoto(firebaseInitializer.upload(file));
+            repository.saveAndFlush( foundObjectOp.get());
+
+            return new ResponseEntity<>(new ApiResponse(object,HttpStatus.OK,"Producto actualizado"),
+                    HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,
+                    "Producto invalido"), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<ApiResponse> updateQuantity(ProductBean object){
+        Optional<ProductBean> foundObjectOp = repository.findById(object.getId());
+        if (foundObjectOp.isPresent()){
+
+            foundObjectOp.get().setQuantity(foundObjectOp.get().getQuantity() + object.getQuantity());
+            repository.saveAndFlush( foundObjectOp.get());
+
+            return new ResponseEntity<>(new ApiResponse(object,HttpStatus.OK,"Producto actualizado"),
                     HttpStatus.OK);
         }else {
             return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,

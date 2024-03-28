@@ -21,9 +21,15 @@ public class ExtrasController {
     }
 
     //Leer
-    @GetMapping("/read{id}")
-    public ResponseEntity<ApiResponse> getById(@PathVariable Long id) {
-        return service.findById(id);
+    @PostMapping("/read")
+    public ResponseEntity<ApiResponse> getById(@RequestBody ExtrasDto dto) {
+
+        return service.findById(dto.getId());
+    }
+    @PostMapping("/readForProduct")
+    public ResponseEntity<ApiResponse> getByForProduct(@RequestBody ExtrasDto dto) {
+
+        return service.findByForExtrasProduct(dto.getId());
     }
 
     //Actualizar

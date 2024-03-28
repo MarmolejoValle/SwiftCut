@@ -19,8 +19,8 @@ public class CategoryController {
 
     //Crear
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> save(@RequestBody CategoryDto dto){
-        return  service.save(dto.toEntity());
+    public ResponseEntity<ApiResponse> save(@ModelAttribute CategoryDto dto){
+        return  service.save(dto.toEntity() , dto.toFile());
     }
 
     //Leer

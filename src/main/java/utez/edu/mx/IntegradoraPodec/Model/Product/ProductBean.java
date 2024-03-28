@@ -24,13 +24,13 @@ import java.util.Set;
 public class ProductBean {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long  id;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
-    private String quantity;
+    private Long quantity;
 
     @Column()
     private String urlPhoto;
@@ -47,16 +47,21 @@ public class ProductBean {
 
 
 
-    public ProductBean(String name, String description, String  quantity) {
+    public ProductBean(String name, String description, Long  quantity) {
         this.name = name;
         this.description = description;
         this.quantity = quantity;
     }
 
-    public ProductBean(Long id, String name, String description, String quantity) {
+    public ProductBean(Long id, String name, String description, Long quantity) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.quantity = quantity;
+    }
+    public ProductBean(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
     }
 }
