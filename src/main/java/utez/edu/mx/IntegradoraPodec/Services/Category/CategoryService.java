@@ -6,9 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
+import utez.edu.mx.IntegradoraPodec.Firebase.FirebaseInitializer;
 import utez.edu.mx.IntegradoraPodec.Model.Category.CategoryBean;
 import utez.edu.mx.IntegradoraPodec.Model.Category.CategoryRepository;
+import utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesBean;
+
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -18,6 +22,8 @@ import java.util.Optional;
 @Data
 public class CategoryService {
     private final CategoryRepository repository;
+    private FirebaseInitializer firebaseInitializer;
+
 
     //Leer (Consulta individual)
     @Transactional(readOnly = true)
@@ -43,14 +49,21 @@ public class CategoryService {
     //SELECT * FROM
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getAll(){
-        return new ResponseEntity<>(new ApiResponse(repository.findAll(), HttpStatus.OK,"Categoria encontrada"), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(repository.findByAllFast(), HttpStatus.OK,"Categoria encontrada"), HttpStatus.OK);
     }
 
     // CREATE
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse>save(CategoryBean object){
-        return new ResponseEntity<>(new ApiResponse(
-                repository.saveAndFlush(object),HttpStatus.OK,"Categoria creada"),HttpStatus.OK);
+    public ResponseEntity<ApiResponse>save(CategoryBean object , MultipartFile file){
+        CategoryBean optional  = repository.saveAndFlush(object) ;
+
+        if (optional.getName() != null){
+            object.setUrlPhoto(firebaseInitializer.upload(file));
+            return new ResponseEntity<>(new ApiResponse(optional
+                    ,HttpStatus.OK,"Categoria registrada"),HttpStatus.OK);
+        }
+
+        return null;
     }
 
     // UPDATE

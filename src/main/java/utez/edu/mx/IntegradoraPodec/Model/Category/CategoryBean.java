@@ -24,6 +24,9 @@ public class CategoryBean {
     private String name;
     @Column(nullable = false)
     private String description;
+    @Column()
+    private  String urlPhoto;
+
     @OneToMany(mappedBy = "categoryBean",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<ProductBean> productBeans;
 
@@ -31,11 +34,15 @@ public class CategoryBean {
     public CategoryBean(String name, String description) {
         this.name = name;
         this.description = description;
+        this.urlPhoto = "";
+
     }
+
 
     public CategoryBean(Long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
+        
     }
 }

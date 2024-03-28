@@ -15,17 +15,23 @@ public class ProductDto {
     private Long id;
     private String name;
     private String description;
-    private String quantity;
-    private MultipartFile file;
+    private Long quantity;
+    private MultipartFile image;
+    private Long idCategory;
 
     public ProductBean toEntity(){
         return new ProductBean(name, description,quantity);
     }
 
+
     public MultipartFile toFile(){
-        return file;
+        return image;
     }
     public ProductBean toEntityId(){
         return new ProductBean(id, name, description,quantity) ;
     }
+    public ProductBean toEntityIdSimple(){
+        return new ProductBean(id, name, description) ;
+    }
+
 }
