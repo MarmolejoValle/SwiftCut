@@ -11,9 +11,9 @@ import java.util.List;
 public interface ExtrasRepository extends JpaRepository<ExtrasBean,Long> {
 
     @Query("""
-select new  utez.edu.mx.IntegradoraPodec.Model.Extras.ExtraDto (e.id , e.name , e.price )from ProductExtrasBean pe
+select new  utez.edu.mx.IntegradoraPodec.Model.Extras.ExtraDto (pe.id , e.name , e.price )from ProductExtrasBean pe
  inner join ProductBean p on pe.productBean.id = p.id and p.id = :productId 
- inner  join ExtrasBean e on pe.extrasBean.id = e.id
+ inner  join ExtrasBean e on pe.extrasBean.id = e.id where pe.extrasBean.id != 2
 """)
     List<ExtraDto> findByExtrasForProduct(@Param("productId") Long id);
     @Query("""

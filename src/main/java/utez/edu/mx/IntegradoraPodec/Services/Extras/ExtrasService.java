@@ -35,11 +35,9 @@ public class ExtrasService {
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> findByForExtrasProduct(Long id){
         List<ExtraDto> object = repository.findByExtrasForProduct(id);
-        if (object.size() != 0) {
+
             return new ResponseEntity<>(new ApiResponse(object, HttpStatus.OK, "Extra encontrado"), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, false, "El extras no se encontro"), HttpStatus.NOT_FOUND);
-        }
+
     }
     //eliminar
     @Transactional(rollbackFor = {SQLException.class})

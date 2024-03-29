@@ -44,4 +44,16 @@ public class ProductExtrasBean {
     @JoinColumn(name = "extras_fk")
     private ExtrasBean extrasBean;
 
+    public ProductExtrasBean(Long idExtra, Long idProduct) {
+        this.productBean  = new ProductBean();
+        this.productBean.setId(idProduct);
+        this.extrasBean  = new ExtrasBean();
+        this.extrasBean.setId(idExtra);
+
+    }
+    public ProductExtrasBean(Long idProduct) {
+        this.productBean  = new ProductBean();
+        this.productBean.setId(idProduct);
+
+    }
 }

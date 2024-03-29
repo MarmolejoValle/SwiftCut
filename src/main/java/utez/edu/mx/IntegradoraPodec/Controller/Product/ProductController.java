@@ -54,4 +54,9 @@ public class ProductController {
     public ResponseEntity<ApiResponse> deleteById(@PathVariable Long id){
         return service.deleteById(id);
     }
+
+        @GetMapping("/readProducts")
+    public ResponseEntity<ApiResponse> getAllProduct() {
+        return service.findAll();
+    }
 }

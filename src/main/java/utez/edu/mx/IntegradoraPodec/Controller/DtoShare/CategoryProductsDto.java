@@ -14,7 +14,7 @@ public class CategoryProductsDto {
         this.name = name;
         this.urlPhoto = urlPhoto;
         this.quantity = quantity;
-        this.register = register;
+        this.register = register -1;
         this.id = id;
     }
 }
