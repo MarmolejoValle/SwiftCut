@@ -24,8 +24,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<EmployeesBean> foundUser = service.getRepository().findByEmail(username);
-        System.out.println("Bloked : " + foundUser.get().getBlocked());
-        System.out.println("Emmail : " + foundUser.get().getEmail());
+     //   System.out.println("Bloked : " + foundUser.get().getBlocked());
+      //  System.out.println("Emmail : " + foundUser.get().getEmail());
 
         if (foundUser.isPresent())
             return UserDetailsImpl.build(foundUser.get());

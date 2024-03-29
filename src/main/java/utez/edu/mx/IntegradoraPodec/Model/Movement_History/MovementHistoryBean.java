@@ -26,7 +26,7 @@ public class MovementHistoryBean {
     private Long id;
     @Column(nullable = false)
     private LocalDateTime date;
-    @Column(nullable = false)
+    @Column()
     private Float quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)

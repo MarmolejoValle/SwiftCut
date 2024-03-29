@@ -7,7 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
+import utez.edu.mx.IntegradoraPodec.Firebase.FirebaseInitializer;
+import utez.edu.mx.IntegradoraPodec.Model.Cart_Shop.CarShopBean;
+import utez.edu.mx.IntegradoraPodec.Model.Cart_Shop.CartShopRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Customers.CustomersBean;
 import utez.edu.mx.IntegradoraPodec.Model.Customers.CustomersRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Person.PersonBean;
@@ -22,6 +26,8 @@ import java.util.Optional;
 @Data
 public class CustomerService {
     private final CustomersRepository repository;
+    private FirebaseInitializer firebaseInitializer;
+    private final CartShopRepository cartShopRepository;
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> findById(Long id){
@@ -60,10 +66,22 @@ public class CustomerService {
 
     // CREATE
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse>save(CustomersBean object){
+    public ResponseEntity<ApiResponse>save(CustomersBean object, MultipartFile file){
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
         String encryptedPsw = bcrypt.encode(object.getPassword());
         object.setPassword(encryptedPsw);
+
+        CustomersBean optional = repository.saveAndFlush(object);
+        if (optional.getEmail() != null){
+            object.getPersonBean().setUrlPhoto(firebaseInitializer.upload(file));
+            return new ResponseEntity<>(new ApiResponse(optional
+                    ,HttpStatus.OK,"Persona registrada"),HttpStatus.OK);
+        }
+
+        CarShopBean carShopBean = new CarShopBean();
+        carShopBean.setCustomersBean(object);
+        cartShopRepository.save(carShopBean);
+
         return new ResponseEntity<>(new ApiResponse(
                 repository.saveAndFlush(object),HttpStatus.OK,"Cliente creado"),HttpStatus.OK);
     }

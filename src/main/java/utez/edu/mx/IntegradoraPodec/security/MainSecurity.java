@@ -66,8 +66,10 @@ public class MainSecurity {
                                 .requestMatchers(
                                         "/api/employees/**",
                                         "/api/rols/**" ,
+                                        "/api/customer/**",
                                         "/api/extras/**" ,
                                         "/api/category/**",
+                                        "/api/productExtras/**",
                                         "/api/product/**").hasAuthority("admin")
                                 .requestMatchers("/api/person/**").hasAnyAuthority("ADMIN_ROLE", "USER_ROLE")
                 )

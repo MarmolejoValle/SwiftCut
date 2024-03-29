@@ -42,7 +42,7 @@ public class AuthService {
             if (foundUser.isEmpty())
                 return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "UserNotFound"), HttpStatus.BAD_REQUEST);
             if (!bcrypt.matches(password, foundUser.get().getPassword()))
-                return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "UserNotFound"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "UserNotFoundPass"), HttpStatus.BAD_REQUEST);
 
 
             EmployeesBean user = foundUser.get();

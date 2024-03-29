@@ -124,11 +124,11 @@ public class EmployeesService {
 
 
 
-        if (object.getPersonBean().getName() != null )  foundObject.get().getPersonBean().setName(object.getPersonBean().getName());
-        if (object.getPersonBean().getPhone() != null )  foundObject.get().getPersonBean().setPhone(object.getPersonBean().getPhone());
-        if (object.getPersonBean().getSex() != null )  foundObject.get().getPersonBean().setSex(object.getPersonBean().getSex());
-        if (object.getEmail() != null )  foundObject.get().setEmail(object.getEmail());
-        if (object.getPersonBean().getLastName() != null )  foundObject.get().getPersonBean().setLastName(object.getPersonBean().getLastName());
+       foundObject.get().getPersonBean().setName(object.getPersonBean().getName());
+         foundObject.get().getPersonBean().setPhone(object.getPersonBean().getPhone());
+        foundObject.get().getPersonBean().setSex(object.getPersonBean().getSex());
+        foundObject.get().setEmail(object.getEmail());
+         foundObject.get().getPersonBean().setLastName(object.getPersonBean().getLastName());
         if (object.getRolsBean().getId() != null )  {
             System.out.println("Id " + object.getRolsBean().getId());
             Optional<RolsBean> rolsBean = rolsRepository.findById(object.getRolsBean().getId());
@@ -140,7 +140,7 @@ public class EmployeesService {
         if (object.getPassword() !=null){
             BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
             String encryptedPsw = bcrypt.encode(object.getPassword());
-            object.setPassword(encryptedPsw);
+            foundObject.get().setPassword(encryptedPsw);
         }
 
 

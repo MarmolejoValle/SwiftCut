@@ -13,7 +13,6 @@ public class ExtrasDto {
     private String name;
     private String description;
     private Float price;
-
     public ExtrasBean toEntityId(){
         return new ExtrasBean(id,name, description, price) ;
     }

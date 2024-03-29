@@ -3,6 +3,7 @@ package utez.edu.mx.IntegradoraPodec.Controller.Customer.dto;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 import utez.edu.mx.IntegradoraPodec.Model.Customers.CustomersBean;
 
 @Data

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
 import utez.edu.mx.IntegradoraPodec.Controller.Category.dto.CategoryDto;
 import utez.edu.mx.IntegradoraPodec.Controller.Customer.dto.CustomerDto;
+import utez.edu.mx.IntegradoraPodec.Controller.DtoShare.CustomerPerson;
 import utez.edu.mx.IntegradoraPodec.Services.Customer.CustomerService;
 
 @RestController
@@ -17,8 +18,8 @@ public class CustomerController {
 
     //Crear
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> save(@RequestBody CustomerDto dto){
-        return  service.save(dto.toEntity());
+    public ResponseEntity<ApiResponse> save(@ModelAttribute  CustomerPerson dto){
+        return  service.save(dto.toEntity(),dto.toFile());
     }
 
     //Leer
