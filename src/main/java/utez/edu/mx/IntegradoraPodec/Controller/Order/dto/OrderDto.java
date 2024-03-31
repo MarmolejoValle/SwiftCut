@@ -21,13 +21,18 @@ public class OrderDto {
     private String description;
     private LocalDate dateDelivered;
     private String direction;
+    private Long idEmployee;
+
+    private Long idCarShop ;
+    private String latitue;
+    private String longitude;
 
     public OrderBean toEntity(){
-        return new OrderBean(dateRequest, datesending, description, dateDelivered,direction );
+        return new OrderBean(dateRequest, datesending, description, dateDelivered );
     }
 
     public OrderBean toEntityId(){
-        return new OrderBean(id, dateRequest, datesending, description, dateDelivered,direction );
+        return new OrderBean(id, dateRequest, datesending, description, dateDelivered );
     }
 }
 

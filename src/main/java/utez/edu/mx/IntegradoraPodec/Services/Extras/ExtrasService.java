@@ -45,7 +45,7 @@ public class ExtrasService {
         Optional<ExtrasBean> opt = repository.findById(id);
         if (opt.isPresent()){
             repository.deleteById(id);
-            return  new ResponseEntity<>(new ApiResponse(HttpStatus.OK, false, "Extra eliminado"), HttpStatus.OK);
+            return  new ResponseEntity<>(new ApiResponse("",HttpStatus.OK, false, "Extra eliminado"), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Extra no encontrado"), HttpStatus.NOT_FOUND);
     }

@@ -24,7 +24,6 @@ public class CustomerPerson {
 
     public CustomersBean toEntity ()  {
         PersonBean personBean  = new PersonBean( name,  lastName,  phone , sex );
-        System.out.println("Passowrd " + password);
         CustomersBean customersBean = new CustomersBean(email, password);
         customersBean.setPersonBean(personBean);
         return customersBean;

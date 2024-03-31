@@ -12,10 +12,13 @@ import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
 import utez.edu.mx.IntegradoraPodec.Firebase.FirebaseInitializer;
 import utez.edu.mx.IntegradoraPodec.Model.Cart_Shop.CarShopBean;
 import utez.edu.mx.IntegradoraPodec.Model.Cart_Shop.CartShopRepository;
+import utez.edu.mx.IntegradoraPodec.Model.Customers.CustomerDto;
 import utez.edu.mx.IntegradoraPodec.Model.Customers.CustomersBean;
 import utez.edu.mx.IntegradoraPodec.Model.Customers.CustomersRepository;
+import utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesDto;
 import utez.edu.mx.IntegradoraPodec.Model.Person.PersonBean;
 import utez.edu.mx.IntegradoraPodec.Model.Product.ProductBean;
+import utez.edu.mx.IntegradoraPodec.Model.StatusPerson.StatusPersonBean;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -30,9 +33,25 @@ public class CustomerService {
     private final CartShopRepository cartShopRepository;
 
     @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> getEmployeeEmail(String email){
+        Optional<CustomerDto> employee = repository.findByInfo(email);
+        return new ResponseEntity<>(new ApiResponse(employee, HttpStatus.OK, "Empleados encontrados"), HttpStatus.OK);
+
+    }
+    @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> findById(Long id){
         Optional<CustomersBean> object = repository.findById(id);
         if (object.isPresent()) {
+            return new ResponseEntity<>(new ApiResponse(object.get(), HttpStatus.OK, "Cliente encontrado"), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, false, "No se encontro el cliente"), HttpStatus.NOT_FOUND);
+        }
+    }
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> findByEmail(String email , String token){
+        Optional<CustomerDto> object = repository.findByEmailLocal(email);
+        if (object.isPresent()) {
+            object.get().setToken(token);
             return new ResponseEntity<>(new ApiResponse(object.get(), HttpStatus.OK, "Cliente encontrado"), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, false, "No se encontro el cliente"), HttpStatus.NOT_FOUND);
@@ -70,17 +89,24 @@ public class CustomerService {
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
         String encryptedPsw = bcrypt.encode(object.getPassword());
         object.setPassword(encryptedPsw);
+        StatusPersonBean statusPersonBean = new StatusPersonBean();
+        statusPersonBean.setId(2L);
+        object.getPersonBean().setStatusPersonBean(statusPersonBean);
+        object.setBlocked(true);
+        object.setStatus(true);
+
 
         CustomersBean optional = repository.saveAndFlush(object);
         if (optional.getEmail() != null){
             object.getPersonBean().setUrlPhoto(firebaseInitializer.upload(file));
-            return new ResponseEntity<>(new ApiResponse(optional
-                    ,HttpStatus.OK,"Persona registrada"),HttpStatus.OK);
+            CarShopBean carShopBean = new CarShopBean();
+            carShopBean.setCustomersBean(object);
+            cartShopRepository.save(carShopBean);
+            return new ResponseEntity<>(new ApiResponse(""
+                    ,HttpStatus.OK,"Cliente  registrado"),HttpStatus.OK);
         }
 
-        CarShopBean carShopBean = new CarShopBean();
-        carShopBean.setCustomersBean(object);
-        cartShopRepository.save(carShopBean);
+
 
         return new ResponseEntity<>(new ApiResponse(
                 repository.saveAndFlush(object),HttpStatus.OK,"Cliente creado"),HttpStatus.OK);

@@ -41,7 +41,7 @@ public class CategoryService {
         Optional<CategoryBean> opt = repository.findById(id);
         if (opt.isPresent()){
             repository.deleteById(id);
-            return  new ResponseEntity<>(new ApiResponse(HttpStatus.OK, false, "categoria eliminada"), HttpStatus.OK);
+            return  new ResponseEntity<>(new ApiResponse("",HttpStatus.OK, "categoria eliminada"), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "No se encontro la categoria"), HttpStatus.NOT_FOUND);
     }
@@ -68,10 +68,20 @@ public class CategoryService {
 
     // UPDATE
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse> update(CategoryBean objects){
+    public ResponseEntity<ApiResponse> update(CategoryBean objects ,  MultipartFile file){
         Optional<CategoryBean>foundObject = repository.findById(objects.getId());
-        if (foundObject.isPresent())
-            return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(objects),HttpStatus.OK,"Categoria actualizada"), HttpStatus.OK);
+        if (foundObject.isPresent()){
+            foundObject.get().setName(objects.getName());
+            foundObject.get().setDescription(objects.getDescription());
+            if (file != null)
+                foundObject.get().setUrlPhoto(firebaseInitializer.upload(file));
+            repository.saveAndFlush(foundObject.get());
+            return new ResponseEntity<>(new ApiResponse(objects,HttpStatus.OK,"Categoria actualizada"), HttpStatus.OK);
+
+        }
+
+
+
         return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true, "Categoria invalida"),HttpStatus.BAD_REQUEST);
     }
 }

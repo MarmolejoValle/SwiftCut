@@ -17,7 +17,7 @@ public class OrderController {
     //Crear
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> save(@RequestBody OrderDto dto){
-        return  service.save(dto.toEntity());
+        return  service.save(dto.getIdCarShop() , dto.getLatitue() ,dto.getLongitude());
     }
 
     //Leer
@@ -30,7 +30,12 @@ public class OrderController {
     @PutMapping("/update")
     public ResponseEntity<ApiResponse> update
     (@RequestBody OrderDto dto){
-        return service.update(dto.toEntityId());
+        return service.update(dto.getId(),dto.getIdEmployee());
+    }
+    @PutMapping("/updateEmployees")
+    public ResponseEntity<ApiResponse> updateEmployees
+            (@RequestBody OrderDto dto){
+        return service.update(dto.getId(),dto.getIdEmployee());
     }
 
     //Leer general

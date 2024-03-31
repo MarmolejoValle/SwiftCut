@@ -21,7 +21,10 @@ public class ProductController {
     public ResponseEntity<ApiResponse> save(@ModelAttribute ProductDto dto){
         return  service.save(dto.toEntity() ,dto.toFile(), dto.getIdCategory());
     }
-
+    @PostMapping("/readCategoryClient")
+    public ResponseEntity<ApiResponse> getByCategoryClient(@RequestBody ProductDto dto) {
+        return service.findProductsForCategory(dto.getIdCategory());
+    }
     //Leer
     @PostMapping("/read")
     public ResponseEntity<ApiResponse> getById(@RequestBody ProductDto dto) {
@@ -50,9 +53,9 @@ public class ProductController {
     {return service.getAll();}
 
     //eliminar
-    @DeleteMapping("/delete{id}")
-    public ResponseEntity<ApiResponse> deleteById(@PathVariable Long id){
-        return service.deleteById(id);
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse> deleteById(@RequestBody ProductDto dto){
+        return service.deleteById(dto.getId());
     }
 
         @GetMapping("/readProducts")

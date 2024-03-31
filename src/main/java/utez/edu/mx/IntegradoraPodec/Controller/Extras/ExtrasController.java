@@ -45,9 +45,9 @@ public class ExtrasController {
     {return service.getAll();}
 
     //eliminar
-    @DeleteMapping("/delete{id}")
-    public ResponseEntity<ApiResponse> deleteById(@PathVariable Long id){
-        return service.deleteById(id);
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse> deleteById(@RequestBody ExtrasDto dto){
+        return service.deleteById(dto.getId());
     }
 
 

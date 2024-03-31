@@ -1,5 +1,6 @@
 package utez.edu.mx.IntegradoraPodec.Model.Person;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +9,7 @@ import utez.edu.mx.IntegradoraPodec.Model.StatusPerson.StatusPersonDto;
 
 import java.util.Objects;
 @Data
-
+@AllArgsConstructor
 public final class PersonDto {
     private final String name;
     private final String lastName;
@@ -44,4 +45,12 @@ public final class PersonDto {
         this.sex = null;
     }
 
+    public PersonDto(String name , String lastName) {
+        this.name = name;
+        this.lastName = lastName;
+        this.phone = null;
+        this.urlPhoto = null;
+        this.statusPersonDto = null;
+        this.sex = null;
+    }
 }

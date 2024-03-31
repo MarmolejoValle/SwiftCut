@@ -22,6 +22,7 @@ public class ApiResponse {
         this.mensaje = mensaje;
 
     }
+
     public ApiResponse(Object data, Boolean error, String mensaje) {
         this.data = data;
         this.error = error;
