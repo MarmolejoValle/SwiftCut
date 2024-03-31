@@ -1,6 +1,7 @@
 package utez.edu.mx.IntegradoraPodec.Model.Employees;
 
 import lombok.Data;
+import utez.edu.mx.IntegradoraPodec.Model.Person.PersonBean;
 import utez.edu.mx.IntegradoraPodec.Model.Person.PersonDto;
 import utez.edu.mx.IntegradoraPodec.Model.Rols.RolDto;
 
@@ -19,6 +20,21 @@ public final class EmployeesDto {
         this.count = count;
         email = null;
         id = 0;
+    }
+
+    public EmployeesDto(Long id , String name, String email, String lastname,Long count) {
+        this.count = count;
+        this.email = email;
+        this.id = id;
+        this.personDto = new PersonDto(name , lastname);
+
+    }
+    public EmployeesDto(Long id , String name, String email, String lastname,int count) {
+        this.count = (long) count;
+        this.email = email;
+        this.id = id;
+        this.personDto = new PersonDto(name , lastname);
+
     }
 
     public EmployeesDto(Long id , String name, String email, String lastname, String type, String urlPhoto , String phone, String status) {

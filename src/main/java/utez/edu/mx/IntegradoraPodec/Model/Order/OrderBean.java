@@ -23,16 +23,18 @@ public class OrderBean {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
+    @Column()
     private LocalDate dateRequest;
-    @Column(nullable = false)
+    @Column()
     private LocalDate dateSending;
-    @Column(nullable = false)
+    @Column()
     private String description;
-    @Column(nullable = false, columnDefinition = "DATE")
+    @Column()
     private LocalDate dateDelivered;
     @Column(nullable = false)
-    private String direction;
+    private String latitude;
+    @Column(nullable = false)
+    private String longitude;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
@@ -56,20 +58,18 @@ public class OrderBean {
     private Set<OrderItemBean> orderItemBeans;
 
 
-    public OrderBean(LocalDate dateRequest, LocalDate datesending, String description, LocalDate dateDelivered, String direction) {
+    public OrderBean(LocalDate dateRequest, LocalDate datesending, String description, LocalDate dateDelivered) {
         this.dateRequest = dateRequest;
         this.dateSending = datesending;
         this.description = description;
         this.dateDelivered = dateDelivered;
-        this.direction = direction;
     }
 
-    public OrderBean(Long id, LocalDate dateRequest, LocalDate datesending, String description, LocalDate dateDelivered, String direction) {
+    public OrderBean(Long id, LocalDate dateRequest, LocalDate datesending, String description, LocalDate dateDelivered) {
         this.id = id;
         this.dateRequest = dateRequest;
         this.dateSending = datesending;
         this.description = description;
         this.dateDelivered = dateDelivered;
-        this.direction = direction;
     }
 }

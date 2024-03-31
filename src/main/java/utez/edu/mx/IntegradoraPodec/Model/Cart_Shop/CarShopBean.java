@@ -29,7 +29,7 @@ public class CarShopBean {
     @JoinColumn(name = "customer_fk")
     private CustomersBean customersBean;
 
-    @OneToMany(mappedBy = "carShopBean",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "carShopBean",fetch = FetchType.EAGER,cascade = CascadeType.ALL , orphanRemoval = true)
     private Set<CarsItemsBean> carsItemsBeans;
 
 

@@ -31,9 +31,8 @@ public class CategoryController {
 
     //Actualizar
     @PutMapping("/update")
-    public ResponseEntity<ApiResponse> update
-    (@RequestBody CategoryDto dto){
-        return service.update(dto.toEntityId());
+    public ResponseEntity<ApiResponse> update(@ModelAttribute CategoryDto dto){
+        return service.update(dto.toEntityId(), dto.getImage());
     }
 
     //Leer general
@@ -42,8 +41,8 @@ public class CategoryController {
     {return service.getAll();}
 
     //eliminar
-    @DeleteMapping("/delete{id}")
-    public ResponseEntity<ApiResponse> deleteById(@PathVariable Long id){
-        return service.deleteById(id);
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse> deleteById(@RequestBody CategoryDto dto){
+        return service.deleteById(dto.getId());
     }
 }

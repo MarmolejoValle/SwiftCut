@@ -59,10 +59,13 @@ public class EmployeesController {
     @GetMapping("/readAll")
     public ResponseEntity<ApiResponse> getAll()
     {return service.getAll();}
+    @GetMapping("/readForOrdens")
+    public ResponseEntity<ApiResponse> getForOrdens()
+    {return service.getAllForOrdens();}
 
     //eliminar
-    @DeleteMapping("/delete{id}")
-    public ResponseEntity<ApiResponse> deleteById(@PathVariable Long id){
-        return service.deleteById(id);
+    @DeleteMapping("/delete")
+    public ResponseEntity<ApiResponse> deleteById(@RequestBody EmployeesDto dto){
+        return service.deleteById(dto.getId());
     }
 }

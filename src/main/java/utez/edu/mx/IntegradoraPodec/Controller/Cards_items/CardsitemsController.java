@@ -19,13 +19,17 @@ public class CardsitemsController {
     //Crear
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> save(@RequestBody Cards_itemsDto dto){
-        return  service.save(dto.toEntity());
+        return  service.save(dto.toEntityAdd());
     }
 
     //Leer
     @GetMapping("/read{id}")
     public ResponseEntity<ApiResponse> getById(@PathVariable Long id) {
         return service.findById(id);
+    }
+    @PostMapping("/readForShop")
+    public ResponseEntity<ApiResponse> readForShop(@RequestBody  Cards_itemsDto dto) {
+        return service.getAllForCarShop(dto.getId());
     }
 
     //Actualizar

@@ -25,7 +25,7 @@ import utez.edu.mx.IntegradoraPodec.security.service.UserDetailsServiceImpl;
 @EnableMethodSecurity
 public class MainSecurity {
     private final String[] WHITE_LIST = {
-            "/api/auth/**"
+            "/api/auth/**","/api/product/**","/api/productExtras/**","/api/extras/**","/api/cardsitems/**"
     };
     private final UserDetailsServiceImpl service;
 
@@ -70,8 +70,10 @@ public class MainSecurity {
                                         "/api/extras/**" ,
                                         "/api/category/**",
                                         "/api/productExtras/**",
+                                        "/api/order/**",
                                         "/api/product/**").hasAuthority("admin")
-                                .requestMatchers("/api/person/**").hasAnyAuthority("ADMIN_ROLE", "USER_ROLE")
+                                .requestMatchers(
+                                        "/api/product/**").hasAnyAuthority("cliente")
                 )
                 .httpBasic(Customizer.withDefaults())
                 .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))

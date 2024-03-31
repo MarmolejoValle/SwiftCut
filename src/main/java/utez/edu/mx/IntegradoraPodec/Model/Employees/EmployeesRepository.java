@@ -52,6 +52,27 @@ public interface EmployeesRepository extends JpaRepository<EmployeesBean,Long> {
     List<EmployeesDto> findAllEmployeesDto();
 
 
+    @Query("""
+            SELECT new utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesDto (e.id, p.name, e.email, p.lastName, COUNT(o.id))
+            FROM EmployeesBean e
+                     INNER JOIN PersonBean p ON p.id = e.personBean.id
+                     INNER JOIN RolsBean r ON r.id = e.rolsBean.id AND r.id = 2 
+                     LEFT JOIN OrderBean o ON o.employeesBean.id = e.id 
+                     INNER JOIN StatusBean s ON s.id = o.statusBean.id AND s.id = 3
+            GROUP BY e.id, p.name, e.email, p.lastName
+            UNION
+            SELECT new utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesDto  (e.id, p.name, e.email, p.lastName, 0 )
+            FROM EmployeesBean e
+                     INNER JOIN PersonBean p ON p.id = e.personBean.id
+                     INNER JOIN RolsBean r ON r.id = e.rolsBean.id AND r.id = 2
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM OrderBean o
+                WHERE o.employeesBean.id = e.id
+            )
+            """)
+    List<EmployeesDto> findAllForOrdens();
+
 
 
 }

@@ -32,6 +32,11 @@ public class CustomersBean {
     @JoinColumn(name = "person")
     private PersonBean personBean;
 
+    @Column(columnDefinition = "BOOL DEFAULT true")
+    private Boolean status;
+    @Column(columnDefinition = "BOOL DEFAULT false")
+    private Boolean blocked;
+    private String token;
 
     @OneToOne(mappedBy = "customersBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private CarShopBean carShopBean;

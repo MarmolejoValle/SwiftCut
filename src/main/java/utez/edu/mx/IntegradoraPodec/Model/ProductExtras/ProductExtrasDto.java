@@ -16,6 +16,12 @@ public class ProductExtrasDto {
         this.extrasBean = null;
         this.productBean = null;
     }
+    public ProductExtrasDto(ProductBean productBean , ExtrasBean extrasBean) {
+        this.id = null;
+        this.productBean = productBean ;
+        this.extrasBean = extrasBean;
+    }
+
     public ProductExtrasDto(Long id, String name , String description , Float price) {
         this.id = id;
         this.extrasBean = new ExtrasBean();

@@ -17,10 +17,10 @@ public class ExtraDto {
         this.description = description;
         this.price = price;
     }
-    public ExtraDto(Long id, String name,  Float price) {
+    public ExtraDto(Long id, String name,  Float price , String description) {
         this.id = id;
         this.name = name;
-        this.description = null;
+        this.description = description;
         this.price = price;
     }
 }

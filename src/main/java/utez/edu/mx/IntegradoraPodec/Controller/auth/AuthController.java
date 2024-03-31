@@ -20,4 +20,8 @@ public class AuthController {
     public ResponseEntity<ApiResponse> signIn(@RequestBody SignDto dto) {
         return service.signIn(dto.getUsername(), dto.getPassword());
     }
+    @PostMapping("/signinClients")
+    public ResponseEntity<ApiResponse> signInClients(@RequestBody SignDto dto) {
+        return service.signInClients(dto.getUsername(), dto.getPassword());
+    }
 }

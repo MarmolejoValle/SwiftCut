@@ -3,6 +3,7 @@ package utez.edu.mx.IntegradoraPodec.security.model;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import utez.edu.mx.IntegradoraPodec.Model.Customers.CustomersBean;
 import utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesBean;
 
 import java.util.ArrayList;
@@ -34,6 +35,13 @@ public class UserDetailsImpl implements UserDetails{
         return new UserDetailsImpl(
                 user.getEmail(), user.getPassword(),
                 user.getBlocked(), user.getStatus(),user.getRolsBean().getType()
+        );
+    }
+    public static UserDetailsImpl buildClient(CustomersBean user){
+
+        return new UserDetailsImpl(
+                user.getEmail(), user.getPassword(),
+                user.getBlocked(), user.getStatus(),"cliente"
         );
     }
     @Override

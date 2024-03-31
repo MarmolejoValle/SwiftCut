@@ -37,4 +37,12 @@ select new  utez.edu.mx.IntegradoraPodec.Model.Product.ProductDto (p.name , p.de
  inner  join ExtrasBean e on pe.extrasBean.id = e.id and e.id = :extrasId 
 """)
     List<ProductDto> findByProductforExtras(@Param("extrasId") Long id);
+
+
+    @Query("""
+        Select new utez.edu.mx.IntegradoraPodec.Model.Product.ProductDto(p.id , p.name,p.description
+        , p.quantity,p.urlPhoto) from ProductBean p 
+        inner join CategoryBean c on c.id = :idCategory
+""")
+    List<ProductDto> findProductsForCategory (@Param("idCategory") Long idCategory);
 }

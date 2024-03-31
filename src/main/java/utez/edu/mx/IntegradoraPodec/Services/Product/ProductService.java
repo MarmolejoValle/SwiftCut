@@ -65,6 +65,14 @@ public class ProductService {
 
 
     }
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> findProductsForCategory(Long id){
+        List<ProductDto> object = repository.findProductsForCategory(id);
+
+        return new ResponseEntity<>(new ApiResponse(object, HttpStatus.OK, "Productos  encontrado"), HttpStatus.OK);
+
+
+    }
 
     // ELIMINAR
     @Transactional(rollbackFor = {SQLException.class})
@@ -77,7 +85,7 @@ public class ProductService {
                 firebaseInitializer.delete(product.getUrlPhoto());
             }
             repository.deleteById(id);
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, false, "Producto eliminado"), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse("", HttpStatus.OK, "Producto eliminado"), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Producto no encontrado"), HttpStatus.NOT_FOUND);
     }

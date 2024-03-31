@@ -79,7 +79,7 @@ public class EmployeesService {
         Optional<EmployeesBean> opt = repository.findById(id);
         if (opt.isPresent()){
             repository.deleteById(id);
-            return  new ResponseEntity<>(new ApiResponse(HttpStatus.OK, false, "Empleado eliminado"), HttpStatus.OK);
+            return  new ResponseEntity<>(new ApiResponse("", HttpStatus.OK, "Empleado eliminado"), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "No se encontro el empleado"), HttpStatus.NOT_FOUND);
     }
@@ -88,6 +88,10 @@ public class EmployeesService {
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getAll(){
         return new ResponseEntity<>(new ApiResponse(repository.findAllEmployeesDto(), HttpStatus.OK,"Empleado encontrado"), HttpStatus.OK);
+    }
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> getAllForOrdens(){
+        return new ResponseEntity<>(new ApiResponse(repository.findAllForOrdens(), HttpStatus.OK,"Empleado encontrado"), HttpStatus.OK);
     }
 
     // CREATE
@@ -100,6 +104,8 @@ public class EmployeesService {
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
         String encryptedPsw = bcrypt.encode(object.getPassword());
         object.setPassword(encryptedPsw);
+        object.setBlocked(true);
+        object.setStatus(true);
 
         EmployeesBean optional  = repository.saveAndFlush(object) ;
         if (optional.getEmail() != null){

@@ -12,7 +12,14 @@ import utez.edu.mx.IntegradoraPodec.Model.Customers.CustomersBean;
 @Setter
 public class Cards_itemsDto {
     private Long id;
+    private Long idProductExtra;
     private int quantity;
+    private Long carId;
+
+
+    public CarsItemsBean toEntityAdd(){
+        return new CarsItemsBean(carId,idProductExtra,quantity);
+    }
 
     public CarsItemsBean toEntity(){
         return new CarsItemsBean(quantity);

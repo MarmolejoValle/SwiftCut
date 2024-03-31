@@ -8,5 +8,6 @@ import java.util.Optional;
 @Repository
 public interface StatusRepository  extends JpaRepository<StatusBean,Long> {
 
-
+    @Override
+    Optional<StatusBean> findById(Long id);
 }

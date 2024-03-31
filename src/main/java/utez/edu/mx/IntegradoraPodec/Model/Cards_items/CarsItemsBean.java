@@ -40,5 +40,17 @@ public class CarsItemsBean {
         this.id = id;
         this.quantity = quantity;
     }
+    public CarsItemsBean(Long carId , Long idProductExtra, int quantity) {
+        CarShopBean carShopBean = new CarShopBean();
+        carShopBean.setId(carId);
+        this.carShopBean = carShopBean;
+
+        ProductExtrasBean productExtrasBean = new ProductExtrasBean();
+        productExtrasBean.setId(idProductExtra);
+
+        this.productExtrasBean = productExtrasBean;
+
+        this.quantity = quantity;
+    }
 }
 
