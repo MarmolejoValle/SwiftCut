@@ -51,7 +51,7 @@ public class AuthService {
 
 
             EmployeesBean user = foundUser.get();
-            System.out.println("Passoword " + password);
+
                 if (user.getPersonBean().getStatusPersonBean().getType().equals("Baja"))
                     return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "UserNotEnabled"), HttpStatus.BAD_REQUEST);
                 if (user.getPersonBean().getStatusPersonBean().getType().equals("Bloqueado"))

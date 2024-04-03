@@ -25,7 +25,13 @@ import utez.edu.mx.IntegradoraPodec.security.service.UserDetailsServiceImpl;
 @EnableMethodSecurity
 public class MainSecurity {
     private final String[] WHITE_LIST = {
-            "/api/auth/**","/api/product/**","/api/productExtras/**","/api/extras/**","/api/cardsitems/**"
+            "/api/auth/**",
+            "/api/product/**",
+            "/api/productExtras/**",
+            "/api/extras/**",
+            "/api/category/**",
+            "/api/cardsitems/**",
+            "/api/priceKg/**"
     };
     private final UserDetailsServiceImpl service;
 
@@ -64,14 +70,7 @@ public class MainSecurity {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST).permitAll()
                                 .requestMatchers(
-                                        "/api/employees/**",
-                                        "/api/rols/**" ,
-                                        "/api/customer/**",
-                                        "/api/extras/**" ,
-                                        "/api/category/**",
-                                        "/api/productExtras/**",
-                                        "/api/order/**",
-                                        "/api/product/**").hasAuthority("admin")
+                                        "/api/**").hasAuthority("admin")
                                 .requestMatchers(
                                         "/api/product/**").hasAnyAuthority("cliente")
                 )

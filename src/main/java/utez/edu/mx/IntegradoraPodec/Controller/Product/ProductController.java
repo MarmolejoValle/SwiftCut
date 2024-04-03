@@ -35,6 +35,10 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getByCategory(@RequestBody ProductDto dto) {
         return service.findByProductForCategory(dto.getId());
     }
+    @PostMapping("/readExtras")
+    public ResponseEntity<ApiResponse> getByExtras(@RequestBody ProductDto dto) {
+        return service.findByProductForExtrasAll(dto.getIdExtras());
+    }
     @PutMapping ("/updateQuantity")
     public ResponseEntity<ApiResponse> updateQuantity(@RequestBody ProductDto dto) {
         return service.updateQuantity(dto.toEntityId());

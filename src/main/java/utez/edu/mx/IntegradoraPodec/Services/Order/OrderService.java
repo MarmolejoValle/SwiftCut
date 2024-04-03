@@ -13,16 +13,23 @@ import utez.edu.mx.IntegradoraPodec.Model.Cart_Shop.CarShopBean;
 import utez.edu.mx.IntegradoraPodec.Model.Cart_Shop.CartShopRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesBean;
 import utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesRepository;
+import utez.edu.mx.IntegradoraPodec.Model.MovementType.MovementTypeBean;
+import utez.edu.mx.IntegradoraPodec.Model.MovementType.MovementTypeRepository;
+import utez.edu.mx.IntegradoraPodec.Model.Movement_History.MovementHistoryBean;
+import utez.edu.mx.IntegradoraPodec.Model.Movement_History.MovementHistoryRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Order.OrdenDto;
 import utez.edu.mx.IntegradoraPodec.Model.Order.OrderBean;
 import utez.edu.mx.IntegradoraPodec.Model.Order.OrderRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Order_Item.OrderItemBean;
 import utez.edu.mx.IntegradoraPodec.Model.Person.PersonBean;
+import utez.edu.mx.IntegradoraPodec.Model.Price_Kg.PriceKgBean;
 import utez.edu.mx.IntegradoraPodec.Model.Status.StatusRepository;
 import utez.edu.mx.IntegradoraPodec.Services.Cards_items.CardsItemsService;
+import utez.edu.mx.IntegradoraPodec.Services.Price_Kg.PriceKgService;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +46,9 @@ public class OrderService {
     private final CardsItemsRepository itemsRepository ;
     private final CardsItemsService itemsService;
     private final StatusRepository statusRepository ;
+    private final PriceKgService priceKgService ;
+    private final MovementTypeRepository movementTypeRepository;
+    private final MovementHistoryRepository movementHistoryRepository;
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> findById(Long id){
         Optional<OrderBean> object = repository.findById(id);
@@ -90,7 +100,8 @@ public class OrderService {
             orderBean.setLongitude(longitude);
             orderBean.setDateRequest(LocalDate.now());
             orderBean.setStatusBean(statusRepository.findById(3L).get());
-
+            PriceKgBean priceKgBeans =  priceKgService.getBeanNow();
+            orderBean.setPriceKgBean(priceKgBeans);
             Set<OrderItemBean> orderItemBeanSet= new HashSet<OrderItemBean>();
             orderBean.setCustomersBean(carShopBean.get().getCustomersBean());
 
@@ -122,6 +133,8 @@ public class OrderService {
 
         if (foundObject.isPresent() && employeesBean.isPresent()) {
             foundObject.get().setEmployeesBean(employeesBean.get());
+            foundObject.get().setStatusBean(statusRepository.findById(2L).get());
+            foundObject.get().setDateSending(LocalDate.now());
             repository.saveAndFlush(foundObject.get());
             return new ResponseEntity<>(new ApiResponse("", HttpStatus.OK, "Order actualizada"),
                     HttpStatus.OK);
@@ -129,5 +142,30 @@ public class OrderService {
         return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,
                 "Order no encontrada"),HttpStatus.BAD_REQUEST);
     }
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<ApiResponse> finish(Long idOrden ){
+        Optional<OrderBean>foundObject = repository.findById(idOrden);
+        MovementTypeBean movementTypeBean = movementTypeRepository.findById(3L).get();
+        Set<MovementHistoryBean> movementHistoryBeans= new HashSet<MovementHistoryBean>();
+        if (foundObject.isPresent()) {
+            foundObject.get().getOrderItemBeans().forEach(orderItemBean -> {
+                    MovementHistoryBean bean = new MovementHistoryBean();
+                    bean.setQuantity((float) orderItemBean.getQuantity());
+                    bean.setProductExtrasBean(orderItemBean.getProductExtrasBean());
+                    bean.setPriceKgBean(foundObject.get().getPriceKgBean());
+                    bean.setDate(LocalDateTime.now());
+                    bean.setMovementTypeBean(movementTypeBean);
+                    movementHistoryBeans.add(bean);
 
+
+            });
+            foundObject.get().setStatusBean(statusRepository.findById(1L).get());
+            repository.saveAndFlush(foundObject.get());
+            movementHistoryRepository.saveAllAndFlush(movementHistoryBeans);
+            return new ResponseEntity<>(new ApiResponse("", HttpStatus.OK, "Order actualizada"),
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,
+                "Order no encontrada"),HttpStatus.BAD_REQUEST);
+    }
 }

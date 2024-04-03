@@ -9,6 +9,7 @@ import lombok.Setter;
 import utez.edu.mx.IntegradoraPodec.Model.Movement_History.MovementHistoryBean;
 import utez.edu.mx.IntegradoraPodec.Model.Order.OrderBean;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -23,10 +24,10 @@ public class PriceKgBean {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private Date dateStart;
+    private LocalDateTime dateStart;
     @Column(nullable = false)
-    private Date dateEnd;
-    @Column(nullable = false)
+    private LocalDateTime dateEnd;
+    @Column()
     private Float priceSale;
     @Column(nullable = false)
     private Float priceBuy;
@@ -39,16 +40,28 @@ public class PriceKgBean {
     @OneToMany(mappedBy = "priceKgBean", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<MovementHistoryBean> movementHistoryBeans;
 
-    public PriceKgBean(Long id, Date dateStart, Date dateEnd, Float priceBuy, Float priceSale) {
+    public PriceKgBean(Long id, LocalDateTime dateStart, Float priceBuy, Float priceSale) {
         this.id = id;
         this.dateStart = dateStart;
-        this.dateEnd = dateEnd ;
+        this.dateEnd = null ;
         this.priceBuy = priceBuy;
         this.priceSale = priceSale;
     }
-    public PriceKgBean( Date dateStart, Date dateEnd, Float priceBuy, Float priceSale) {
+    public PriceKgBean( Float priceBuy, Float priceSale) {
+
+        this.priceBuy = priceBuy;
+        this.priceSale = priceSale;
+    }
+    public PriceKgBean( Long id ,Float priceBuy, Float priceSale) {
+        this.id = id;
+        this.dateStart = null;
+        this.dateEnd = null ;
+        this.priceBuy = priceBuy;
+        this.priceSale = priceSale;
+    }
+    public PriceKgBean( LocalDateTime dateStart, Float priceBuy, Float priceSale) {
         this.dateStart = dateStart;
-        this.dateEnd = dateEnd ;
+        this.dateEnd = null ;
         this.priceBuy = priceBuy;
         this.priceSale = priceSale;
     }

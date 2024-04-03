@@ -18,6 +18,8 @@ public class ProductDto {
     private Long quantity;
     private MultipartFile image;
     private Long idCategory;
+    private Long idExtras;
+
 
     public ProductBean toEntity(){
         return new ProductBean(name, description,quantity);

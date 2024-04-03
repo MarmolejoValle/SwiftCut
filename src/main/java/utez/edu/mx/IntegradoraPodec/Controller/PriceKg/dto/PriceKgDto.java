@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import utez.edu.mx.IntegradoraPodec.Model.Price_Kg.PriceKgBean;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 @Data
 @Getter
@@ -11,15 +13,13 @@ import java.util.Date;
 public class PriceKgDto {
 
     private Long id;
-    private Date date_start;
-    private Date date_end;
-    private Float price_sale;
-    private Float price_buy;
+    private Float priceSale;
+    private Float priceBuy;
 
     public PriceKgBean toEntityId(){
-        return new PriceKgBean(id,date_start,date_end,price_buy,price_sale) ;
+        return new PriceKgBean(id,priceBuy,priceSale) ;
     }
     public PriceKgBean toEntity(){
-        return new PriceKgBean(date_start,date_end,price_buy,price_sale);
+        return new PriceKgBean(priceBuy,priceSale);
     }
 }

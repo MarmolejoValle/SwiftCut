@@ -10,6 +10,9 @@ import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
 import utez.edu.mx.IntegradoraPodec.Model.Customers.CustomersBean;
 import utez.edu.mx.IntegradoraPodec.Model.Movement_History.MovementHistoryBean;
 import utez.edu.mx.IntegradoraPodec.Model.Movement_History.MovementHistoryRepository;
+import utez.edu.mx.IntegradoraPodec.Model.Price_Kg.PriceKgBean;
+import utez.edu.mx.IntegradoraPodec.Model.Price_Kg.PriceKgDto;
+import utez.edu.mx.IntegradoraPodec.Model.Price_Kg.PriceKgRepository;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -20,6 +23,7 @@ import java.util.Optional;
 @Data
 public class MovementHistoryService {
     private final MovementHistoryRepository repository;
+    private final PriceKgRepository priceKgRepository ;
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> findById(Long id){
@@ -44,10 +48,25 @@ public class MovementHistoryService {
     //SELECT * FROM
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getAll(){
-        return new ResponseEntity<>(new ApiResponse(repository.findAll(), HttpStatus.OK,"Historial de movimiento encontrado"),
+        PriceKgDto kgDto = priceKgRepository.findNullPriceKg().get();
+        return new ResponseEntity<>(new ApiResponse(repository.getAll(kgDto.getId()), HttpStatus.OK,"Historial de movimiento encontrado"),
                 HttpStatus.OK);
     }
 
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> categoryData(){
+        PriceKgDto kgDto = priceKgRepository.findNullPriceKg().get();
+
+        return new ResponseEntity<>(new ApiResponse(repository.categoryData(kgDto.getId()), HttpStatus.OK,"Historial de movimiento encontrado"),
+                HttpStatus.OK);
+    }
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> quantityCategory(){
+        PriceKgDto kgDto = priceKgRepository.findNullPriceKg().get();
+
+        return new ResponseEntity<>(new ApiResponse(repository.quantityCategory(kgDto.getId()), HttpStatus.OK,"Historial de movimiento encontrado"),
+                HttpStatus.OK);
+    }
 
 
     // CREATE

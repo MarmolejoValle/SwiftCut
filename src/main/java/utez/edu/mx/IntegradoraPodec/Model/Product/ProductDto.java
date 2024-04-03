@@ -17,6 +17,21 @@ public class ProductDto {
         this.quantity = quantity;
         this.urlPhoto = urlPhoto;
     }
+    public ProductDto( String name,  String urlPhoto) {
+        this.id = 0L;
+        this.name = name;
+        this.description = null;
+        this.quantity = null;
+        this.urlPhoto = urlPhoto;
+    }
+
+    public ProductDto( String name,  String description , String urlPhoto) {
+        this.id = 0L;
+        this.name = name;
+        this.description = description;
+        this.quantity = null;
+        this.urlPhoto = urlPhoto;
+    }
 
     public ProductDto(String name, String description, Long quantity, String urlPhoto) {
         this.name = name;
