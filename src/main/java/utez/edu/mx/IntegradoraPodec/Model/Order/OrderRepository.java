@@ -16,6 +16,7 @@ public interface OrderRepository extends JpaRepository<OrderBean,Long> {
     OrderBean o 
     inner join CustomersBean  c on c.id = o.customersBean.id
     inner join PersonBean p on p.id = c.personBean.id
+    inner join StatusBean st on st.id  = 3 and o.statusBean.id = st.id
 """)
     List<OrdenDto> getAllFast();
 }

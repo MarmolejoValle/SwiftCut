@@ -14,6 +14,8 @@ import utez.edu.mx.IntegradoraPodec.Model.Cards_items.CarsItemsBean;
 import utez.edu.mx.IntegradoraPodec.Model.Category.CategoryBean;
 import utez.edu.mx.IntegradoraPodec.Model.Category.CategoryRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Extras.ExtrasBean;
+import utez.edu.mx.IntegradoraPodec.Model.MovementType.MovementTypeBean;
+import utez.edu.mx.IntegradoraPodec.Model.MovementType.MovementTypeRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Movement_History.MovementHistoryBean;
 import utez.edu.mx.IntegradoraPodec.Model.Movement_History.MovementHistoryRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Person.PersonBean;
@@ -23,6 +25,7 @@ import utez.edu.mx.IntegradoraPodec.Model.Product.ProductRepository;
 import utez.edu.mx.IntegradoraPodec.Model.ProductExtras.ProductExtrasBean;
 import utez.edu.mx.IntegradoraPodec.Model.ProductExtras.ProductExtrasRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Rols.RolsBean;
+import utez.edu.mx.IntegradoraPodec.Services.Movement_History.MovementHistoryService;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -37,6 +40,8 @@ public class ProductService {
     private final ProductRepository repository;
     private final CategoryRepository categoryRepository;
     private final MovementHistoryRepository movementHistoryRepository;
+    private final MovementTypeRepository movementTypeRepository;
+    private final MovementHistoryService movementHistoryService;
     private final ProductExtrasRepository productExtrasRepository;
     private FirebaseInitializer firebaseInitializer;
 
@@ -62,6 +67,14 @@ public class ProductService {
         List<CategoryProductsDto> object = repository.findByProductForCategory(id);
 
             return new ResponseEntity<>(new ApiResponse(object, HttpStatus.OK, "Productos  encontrado"), HttpStatus.OK);
+
+
+    }
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> findByProductForExtrasAll(Long id){
+        List<ProductDto> object = repository.findByProductForExtrasAll(id);
+
+        return new ResponseEntity<>(new ApiResponse(object, HttpStatus.OK, "Productos  encontrado"), HttpStatus.OK);
 
 
     }
@@ -160,12 +173,15 @@ public class ProductService {
     public ResponseEntity<ApiResponse> updateQuantity(ProductBean object){
         Optional<ProductBean> foundObjectOp = repository.findById(object.getId());
         if (foundObjectOp.isPresent()){
+            MovementTypeBean typeBean ;
             if (object.getQuantity() < 0){
-                System.out.println();
+                typeBean = movementTypeRepository.findById(2L).get();
             }else {
-
+                typeBean = movementTypeRepository.findById(2L).get();
             }
+
             MovementHistoryBean movementHistoryBean = new MovementHistoryBean();
+            movementHistoryBean.setMovementTypeBean(typeBean);
             movementHistoryBean.setDate(LocalDateTime.now());
             movementHistoryBean.setQuantity(Float.valueOf(object.getQuantity()));
             movementHistoryRepository.save(movementHistoryBean);

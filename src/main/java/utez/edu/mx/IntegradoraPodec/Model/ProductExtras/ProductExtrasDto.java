@@ -1,33 +1,32 @@
 package utez.edu.mx.IntegradoraPodec.Model.ProductExtras;
 
 import lombok.Data;
+import utez.edu.mx.IntegradoraPodec.Model.Extras.ExtraDto;
 import utez.edu.mx.IntegradoraPodec.Model.Extras.ExtrasBean;
 import utez.edu.mx.IntegradoraPodec.Model.Product.ProductBean;
+import utez.edu.mx.IntegradoraPodec.Model.Product.ProductDto;
 
 @Data
 public class ProductExtrasDto {
     private final Long id;
-    private final ExtrasBean extrasBean;
-    private final ProductBean productBean ;
+    private final ExtraDto extraDto;
+    private final ProductDto productDto ;
 
 
     public ProductExtrasDto(Long id) {
         this.id = id;
-        this.extrasBean = null;
-        this.productBean = null;
+        this.extraDto = null;
+        this.productDto = null;
     }
-    public ProductExtrasDto(ProductBean productBean , ExtrasBean extrasBean) {
+    public ProductExtrasDto(ProductDto productBean , ExtraDto extrasBean) {
         this.id = null;
-        this.productBean = productBean ;
-        this.extrasBean = extrasBean;
+        this.productDto = productBean ;
+        this.extraDto = extrasBean;
     }
 
     public ProductExtrasDto(Long id, String name , String description , Float price) {
         this.id = id;
-        this.extrasBean = new ExtrasBean();
-        this.extrasBean.setName(name);
-        this.extrasBean.setDescription(description);
-        this.extrasBean.setPrice(price);
-        this.productBean = null;
+        this.extraDto = new ExtraDto(name, description,price);
+        this.productDto = null;
     }
 }

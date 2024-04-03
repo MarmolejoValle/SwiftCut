@@ -27,15 +27,16 @@ public class OrderController {
     }
 
     //Actualizar
-    @PutMapping("/update")
-    public ResponseEntity<ApiResponse> update
-    (@RequestBody OrderDto dto){
-        return service.update(dto.getId(),dto.getIdEmployee());
-    }
+
     @PutMapping("/updateEmployees")
     public ResponseEntity<ApiResponse> updateEmployees
             (@RequestBody OrderDto dto){
         return service.update(dto.getId(),dto.getIdEmployee());
+    }
+    @PutMapping("/finish")
+    public ResponseEntity<ApiResponse> finish
+            (@RequestBody OrderDto dto){
+        return service.finish(dto.getId());
     }
 
     //Leer general

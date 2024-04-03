@@ -37,6 +37,12 @@ public class MovementHistoryController {
     @GetMapping("/readAll")
     public ResponseEntity<ApiResponse> getAll()
     {return service.getAll();}
+    @GetMapping("/readAllCategory")
+    public ResponseEntity<ApiResponse> readAllCategory()
+    {return service.categoryData();}
+    @GetMapping("/quantityCategory")
+    public ResponseEntity<ApiResponse> quantityCategory()
+    {return service.quantityCategory();}
 
     //eliminar
     @DeleteMapping("/delete{id}")

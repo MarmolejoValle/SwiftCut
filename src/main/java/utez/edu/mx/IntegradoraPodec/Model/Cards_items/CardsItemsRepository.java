@@ -19,7 +19,7 @@ public interface CardsItemsRepository extends JpaRepository<CarsItemsBean,Long> 
     @Query("""
 
 SELECT NEW
-    utez.edu.mx.IntegradoraPodec.Model.Cards_items.CardsItemsDto (p.id , ct.quantity , p.name , e.name , p.urlPhoto)
+    utez.edu.mx.IntegradoraPodec.Model.Cards_items.CardsItemsDto (p.id , ct.quantity , p.name , e.name , p.urlPhoto , e.price)
 from CarsItemsBean ct
          inner join CarShopBean  cs on cs.id = :idCarShop
          inner join ProductExtrasBean px on px.id = ct.productExtrasBean.id

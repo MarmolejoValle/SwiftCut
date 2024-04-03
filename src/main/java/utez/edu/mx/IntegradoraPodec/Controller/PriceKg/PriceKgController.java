@@ -21,17 +21,14 @@ public class PriceKgController {
     }
 
     //Leer
-    @GetMapping("/read{id}")
-    public ResponseEntity<ApiResponse> getById(@PathVariable Long id) {
-        return service.findById(id);
+    @GetMapping("/readNow")
+    public ResponseEntity<ApiResponse> getById() {
+        return service.getNow();
     }
 
+
     //Actualizar
-    @PutMapping("/update")
-    public ResponseEntity<ApiResponse> update
-    (@RequestBody PriceKgDto dto){
-        return service.update(dto.toEntityId());
-    }
+
 
     //Leer general
     @GetMapping("/readAll")
@@ -39,9 +36,5 @@ public class PriceKgController {
     {return service.getAll();}
 
     //eliminar
-    @DeleteMapping("/delete{id}")
-    public ResponseEntity<ApiResponse> deleteById(@PathVariable Long id){
-        return service.deleteById(id);
-    }
 
 }

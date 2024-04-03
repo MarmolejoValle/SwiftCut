@@ -9,9 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
 import utez.edu.mx.IntegradoraPodec.Model.Customers.CustomersBean;
 import utez.edu.mx.IntegradoraPodec.Model.Price_Kg.PriceKgBean;
+import utez.edu.mx.IntegradoraPodec.Model.Price_Kg.PriceKgDto;
 import utez.edu.mx.IntegradoraPodec.Model.Price_Kg.PriceKgRepository;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.Optional;
 
 @Data
@@ -31,15 +35,7 @@ public class PriceKgService {
         }
     }
     //eliminar
-    @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse> deleteById(Long id) {
-        Optional<PriceKgBean> opt = repository.findById(id);
-        if (opt.isPresent()){
-            repository.deleteById(id);
-            return  new ResponseEntity<>(new ApiResponse(HttpStatus.OK, false, "Precio por kilo Eliminado"), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Precio por kilo no encontrado"), HttpStatus.NOT_FOUND);
-    }
+
 
     //SELECT * FROM
     @Transactional(readOnly = true)
@@ -50,31 +46,36 @@ public class PriceKgService {
 
     // SELECT * FROM WHERE ID
     @Transactional(readOnly = true)
-    public ResponseEntity<ApiResponse> getId(PriceKgBean object){
-        Optional<PriceKgBean> foundObject = repository.findById(object.getId());
+    public ResponseEntity<ApiResponse> getNow(){
+        Optional<PriceKgDto> foundObject = repository.findNullPriceKg();
         if(foundObject.isPresent())
-            return new ResponseEntity<>(new ApiResponse(repository.findById(object.getId()),HttpStatus.OK,
+            return new ResponseEntity<>(new ApiResponse(foundObject.get(),HttpStatus.OK,
                     "Precio por kilo  encontrado"),
                     HttpStatus.OK);
         return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,
                 "Precio por kilo no encontrado"),HttpStatus.BAD_REQUEST);
     }
+    @Transactional(readOnly = true)
+    public PriceKgBean getBeanNow(){
+        PriceKgDto kgDto = repository.findNullPriceKg().get();
+        return repository.findById(kgDto.getId()).get();
+    }
+
 
     // CREATE
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse>save(PriceKgBean object){
-        return new ResponseEntity<>(new ApiResponse(
-                repository.saveAndFlush(object),HttpStatus.OK,"Precio por kilo creado"),HttpStatus.OK);
+        PriceKgDto kgDto =  repository.findNullPriceKg().get();
+        PriceKgBean kgBean = repository.findById(kgDto.getId()).get();
+        kgBean.setDateEnd(LocalDateTime.now());
+        PriceKgBean priceKgBean = new PriceKgBean(LocalDateTime.now(),object.getPriceBuy(),object.getPriceSale());
+       repository.saveAndFlush(kgBean);
+        repository.saveAndFlush(priceKgBean);
+
+        return new ResponseEntity<>(new ApiResponse(priceKgBean
+                ,HttpStatus.OK,"Precio por kilo creado"),HttpStatus.OK);
     }
 
     // UPDATE
-    @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse> update(PriceKgBean objects){
-        Optional<PriceKgBean>foundObject = repository.findById(objects.getId());
-        if (foundObject.isPresent())
-            return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(objects),HttpStatus.OK,"Precio por kilo actulizado"),
-                    HttpStatus.OK);
-        return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,
-                "Precio por kilo  no encontrado"),HttpStatus.BAD_REQUEST);
-    }
+
 }
