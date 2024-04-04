@@ -2,6 +2,8 @@ package utez.edu.mx.IntegradoraPodec.Controller.Order;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
 import utez.edu.mx.IntegradoraPodec.Controller.Order.dto.OrderDto;
@@ -43,6 +45,14 @@ public class OrderController {
     @GetMapping("/readAll")
     public ResponseEntity<ApiResponse> getAll()
     {return service.getAll();}
+    @PostMapping("/readAllForEmployees")
+    public ResponseEntity<ApiResponse> getAllForEmlployees(@RequestBody OrderDto dto)
+    {return service.getAllForEmployees(dto.getIdEmployee());}
+
+    @PutMapping("/remove")
+    public ResponseEntity<ApiResponse> removeById(@RequestBody OrderDto dto){
+        return service.removeById(dto.getId());
+    }
 
     //eliminar
     @DeleteMapping("/delete{id}")

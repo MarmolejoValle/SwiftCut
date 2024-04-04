@@ -68,11 +68,28 @@ public class OrderService {
         }
         return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Order No encontrado"), HttpStatus.NOT_FOUND);
     }
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<ApiResponse> removeById(Long id) {
+        Optional<OrderBean> opt = repository.findById(id);
+        if (opt.isPresent()){
+            opt.get().setStatusBean(statusRepository.findById(3L).get());
+            opt.get().setEmployeesBean(null);
+            opt.get().setDateSending(null);
+
+            repository.saveAndFlush(opt.get());
+            return  new ResponseEntity<>(new ApiResponse("",HttpStatus.OK, "Order Eliminado"), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Order No encontrado"), HttpStatus.NOT_FOUND);
+    }
 
     //SELECT * FROM
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getAll(){
         return new ResponseEntity<>(new ApiResponse(repository.getAllFast(), HttpStatus.OK,"Ordenes"),
+                HttpStatus.OK);
+    }
+    public ResponseEntity<ApiResponse> getAllForEmployees(Long idEmployees){
+        return new ResponseEntity<>(new ApiResponse(repository.getAllFastForEmployees(idEmployees), HttpStatus.OK,"Ordenes del empleado"),
                 HttpStatus.OK);
     }
 
