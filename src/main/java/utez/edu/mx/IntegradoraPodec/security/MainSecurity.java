@@ -31,7 +31,10 @@ public class MainSecurity {
             "/api/extras/**",
             "/api/category/**",
             "/api/cardsitems/**",
-            "/api/priceKg/**"
+            "/api/priceKg/**",
+            "/ws/**",
+            "/api/order/**"
+
     };
     private final UserDetailsServiceImpl service;
 
@@ -70,9 +73,11 @@ public class MainSecurity {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST).permitAll()
                                 .requestMatchers(
-                                        "/api/**").hasAuthority("admin")
+                                        "/api/**",
+                                "/chat-socket").hasAuthority("admin")
                                 .requestMatchers(
-                                        "/api/product/**").hasAnyAuthority("cliente")
+                                        "/api/product/**",
+                                        "/api/order/**").hasAuthority("cliente").anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))

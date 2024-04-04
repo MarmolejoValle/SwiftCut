@@ -18,6 +18,6 @@ public class OrderItemDto {
     }
 
     public OrderItemBean toEntityId(){
-        return new OrderItemBean(id, quantity, price) ;
+        return new OrderItemBean(id, quantity) ;
     }
 }
