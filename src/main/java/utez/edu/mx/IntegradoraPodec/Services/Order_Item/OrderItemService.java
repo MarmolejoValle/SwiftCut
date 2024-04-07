@@ -81,7 +81,9 @@ public class OrderItemService {
             repository.saveAndFlush(foundObject.get());
             return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(objects), HttpStatus.OK, "Articulo de orden actualizado"),
                     HttpStatus.OK);
+
         }*/
+
 
         return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,
                 "Articulo de orden no encontrado"),HttpStatus.BAD_REQUEST);

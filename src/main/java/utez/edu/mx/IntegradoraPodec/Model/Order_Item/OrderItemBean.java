@@ -45,6 +45,7 @@ public class OrderItemBean {
     }
 
     public OrderItemBean(Long id , Float quantity) {
+
         this.id = id ;
         this.quantity = quantity;
     }

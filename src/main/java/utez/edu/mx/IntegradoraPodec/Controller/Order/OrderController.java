@@ -55,9 +55,12 @@ public class OrderController {
     @GetMapping("/readAll")
     public ResponseEntity<ApiResponse> getAll()
     {return service.getAll();}
+
     @PostMapping("/readAllForCustomer")
     public ResponseEntity<ApiResponse> getAll(@RequestBody OrderDto dto)
     {return service.getAllFastForCustomer(dto.getIdCustomer());}
+
+
     @PostMapping("/readAllForEmployees")
     public ResponseEntity<ApiResponse> getAllForEmlployees(@RequestBody OrderDto dto)
     {return service.getAllForEmployees(dto.getIdEmployee());}

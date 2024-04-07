@@ -66,4 +66,13 @@ where o.id  = :idOrder
 
 """)
     List<OrdenDto> getAllProduct (@Param("idOrder") Long idOrder)  ;
+=======
+    Select new  utez.edu.mx.IntegradoraPodec.Model.Order.OrdenDto(o.id , p.name,p.lastName,c.email ) FROM 
+    OrderBean o 
+    inner join CustomersBean  c on c.id = o.customersBean.id
+    inner join PersonBean p on p.id = c.personBean.id
+    inner join StatusBean st on st.id  = 2 and o.statusBean.id = st.id
+    where :idEmployees = o.employeesBean.id
+""")
+    List<OrdenDto> getAllFastForEmployees(@Param("idEmployees") Long idEmployees);
 }

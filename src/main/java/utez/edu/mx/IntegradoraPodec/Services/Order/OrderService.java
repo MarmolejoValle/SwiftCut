@@ -88,19 +88,23 @@ public class OrderService {
         return new ResponseEntity<>(new ApiResponse(repository.getAllFast(), HttpStatus.OK,"Ordenes"),
                 HttpStatus.OK);
     }
+
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getAllFastForCustomer(Long idCustomer){
         return new ResponseEntity<>(new ApiResponse(repository.getAllFastForCustomer(idCustomer), HttpStatus.OK,"Ordenes"),
                 HttpStatus.OK);
     }
+
     public ResponseEntity<ApiResponse> getAllForEmployees(Long idEmployees){
         return new ResponseEntity<>(new ApiResponse(repository.getAllFastForEmployees(idEmployees), HttpStatus.OK,"Ordenes del empleado"),
                 HttpStatus.OK);
     }
+
     public ResponseEntity<ApiResponse> getAllForOrder(Long idOrder){
         return new ResponseEntity<>(new ApiResponse(repository.getAllProduct(idOrder), HttpStatus.OK,"Ordenes del empleado"),
                 HttpStatus.OK);
     }
+
 
     // SELECT * FROM WHERE ID
     @Transactional(readOnly = true)
