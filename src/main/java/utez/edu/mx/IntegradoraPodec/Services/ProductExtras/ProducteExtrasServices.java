@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
 import utez.edu.mx.IntegradoraPodec.Controller.DtoShare.CategoryProductsDto;
 import utez.edu.mx.IntegradoraPodec.Model.Extras.ExtrasRepository;
+import utez.edu.mx.IntegradoraPodec.Model.Product.ProductBean;
 import utez.edu.mx.IntegradoraPodec.Model.Product.ProductRepository;
 import utez.edu.mx.IntegradoraPodec.Model.ProductExtras.ProductExtrasBean;
 import utez.edu.mx.IntegradoraPodec.Model.ProductExtras.ProductExtrasDto;
@@ -69,4 +70,23 @@ public class ProducteExtrasServices {
 
 
     }
+    @Transactional(rollbackFor = {SQLException.class})
+    public ProductExtrasBean findProductExtraForProduct(Long idProduct){
+        Optional<ProductExtrasDto> productExtrasDto = productExtrasRepository.findProductExtrasForProduct(idProduct);
+
+        if (productExtrasDto.isPresent())
+        {
+            Optional<ProductExtrasBean> extrasBean = productExtrasRepository.findById(productExtrasDto.get().getId());
+            System.out.println("Producto encontrado");
+            return extrasBean.get();
+
+        }
+
+        return null;
+
+
+
+    }
+
+
 }

@@ -88,8 +88,17 @@ public class OrderService {
         return new ResponseEntity<>(new ApiResponse(repository.getAllFast(), HttpStatus.OK,"Ordenes"),
                 HttpStatus.OK);
     }
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> getAllFastForCustomer(Long idCustomer){
+        return new ResponseEntity<>(new ApiResponse(repository.getAllFastForCustomer(idCustomer), HttpStatus.OK,"Ordenes"),
+                HttpStatus.OK);
+    }
     public ResponseEntity<ApiResponse> getAllForEmployees(Long idEmployees){
         return new ResponseEntity<>(new ApiResponse(repository.getAllFastForEmployees(idEmployees), HttpStatus.OK,"Ordenes del empleado"),
+                HttpStatus.OK);
+    }
+    public ResponseEntity<ApiResponse> getAllForOrder(Long idOrder){
+        return new ResponseEntity<>(new ApiResponse(repository.getAllProduct(idOrder), HttpStatus.OK,"Ordenes del empleado"),
                 HttpStatus.OK);
     }
 
@@ -127,7 +136,7 @@ public class OrderService {
                  OrderItemBean itemBean = new OrderItemBean();
                  itemBean.setQuantity(carsItemsBean.getQuantity());
                  itemBean.setProductExtrasBean(carsItemsBean.getProductExtrasBean());
-                 itemBean.setPrice(0);
+                 itemBean.setPrice(carsItemsBean.getProductExtrasBean().getExtrasBean().getPrice());
                  orderItemBeanSet.add(itemBean);
                  itemBean.setOrderBean(orderBean);
 
@@ -160,8 +169,8 @@ public class OrderService {
                 "Order no encontrada"),HttpStatus.BAD_REQUEST);
     }
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse> finish(Long idOrden ){
-        Optional<OrderBean>foundObject = repository.findById(idOrden);
+    public ResponseEntity<ApiResponse> finish(OrderBean object ){
+        Optional<OrderBean>foundObject = repository.findById(object.getId());
         MovementTypeBean movementTypeBean = movementTypeRepository.findById(3L).get();
         Set<MovementHistoryBean> movementHistoryBeans= new HashSet<MovementHistoryBean>();
         if (foundObject.isPresent()) {
@@ -177,8 +186,25 @@ public class OrderService {
 
             });
             foundObject.get().setStatusBean(statusRepository.findById(1L).get());
+            foundObject.get().setDateDelivered(LocalDate.now());
+            foundObject.get().setDescription(object.getDescription());
             repository.saveAndFlush(foundObject.get());
             movementHistoryRepository.saveAllAndFlush(movementHistoryBeans);
+            return new ResponseEntity<>(new ApiResponse("", HttpStatus.OK, "Order actualizada"),
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,
+                "Order no encontrada"),HttpStatus.BAD_REQUEST);
+    }
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<ApiResponse> refused(OrderBean object ){
+        Optional<OrderBean>foundObject = repository.findById(object.getId());
+        if (foundObject.isPresent()) {
+
+            foundObject.get().setStatusBean(statusRepository.findById(4L).get());
+            foundObject.get().setDateDelivered(LocalDate.now());
+            foundObject.get().setDescription(object.getDescription());
+            repository.saveAndFlush(foundObject.get());
             return new ResponseEntity<>(new ApiResponse("", HttpStatus.OK, "Order actualizada"),
                     HttpStatus.OK);
         }

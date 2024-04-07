@@ -73,13 +73,16 @@ public class OrderItemService {
     // UPDATE
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse> update(OrderItemBean objects){
+        /*
+        *  System.out.println("ID : " + objects.getId());
         Optional<OrderItemBean> foundObject = repository.findById(objects.getId());
         if (foundObject.isPresent()) {
             foundObject.get().setQuantity(objects.getQuantity());
             repository.saveAndFlush(foundObject.get());
             return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(objects), HttpStatus.OK, "Articulo de orden actualizado"),
                     HttpStatus.OK);
-        }
+        }*/
+
         return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,
                 "Articulo de orden no encontrado"),HttpStatus.BAD_REQUEST);
     }

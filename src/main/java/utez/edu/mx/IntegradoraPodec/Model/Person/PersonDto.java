@@ -1,5 +1,6 @@
 package utez.edu.mx.IntegradoraPodec.Model.Person;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -9,6 +10,8 @@ import utez.edu.mx.IntegradoraPodec.Model.StatusPerson.StatusPersonDto;
 
 import java.util.Objects;
 @Data
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+
 @AllArgsConstructor
 public final class PersonDto {
     private final String name;

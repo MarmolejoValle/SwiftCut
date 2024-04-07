@@ -1,10 +1,14 @@
 package utez.edu.mx.IntegradoraPodec.Model.Movement_History;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+
+
 public class GraficsDto {
     private final LocalDateTime dateTime;
     private final Float quantity ;

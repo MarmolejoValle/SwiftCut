@@ -22,9 +22,9 @@ public class OrderItemBean {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private int quantity;
+    private Float quantity;
     @Column(nullable = false)
-    private double price;
+    private Float price;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
@@ -40,12 +40,11 @@ public class OrderItemBean {
 
 
 
-    public OrderItemBean(int quantity, double price) {
+    public OrderItemBean(Float quantity) {
         this.quantity = quantity;
-        this.price = price;
     }
 
-    public OrderItemBean(Long id, int quantity) {
+    public OrderItemBean(Long id , Float quantity) {
         this.id = id ;
         this.quantity = quantity;
     }

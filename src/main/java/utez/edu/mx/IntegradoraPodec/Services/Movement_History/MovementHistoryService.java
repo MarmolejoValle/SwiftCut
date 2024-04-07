@@ -15,6 +15,7 @@ import utez.edu.mx.IntegradoraPodec.Model.Price_Kg.PriceKgDto;
 import utez.edu.mx.IntegradoraPodec.Model.Price_Kg.PriceKgRepository;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -69,6 +70,9 @@ public class MovementHistoryService {
     }
 
 
+
+
+
     // CREATE
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse>save(MovementHistoryBean object){
@@ -84,4 +88,17 @@ public class MovementHistoryService {
             return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(objects),HttpStatus.OK,"Historial de movimiento actualizado"), HttpStatus.OK);
         return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true, "Historial de movimiento invalido"),HttpStatus.BAD_REQUEST);
     }
+
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public void addMovement(MovementHistoryBean historyBean){
+
+
+
+
+
+
+    }
+
+
 }

@@ -33,7 +33,9 @@ public class MainSecurity {
             "/api/cardsitems/**",
             "/api/priceKg/**",
             "/ws/**",
-            "/api/order/**"
+            "/api/order/**",
+            "/api/cardsitems/**",
+            "/api/customer/**"
 
     };
     private final UserDetailsServiceImpl service;

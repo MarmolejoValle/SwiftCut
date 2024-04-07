@@ -1,25 +1,36 @@
 package utez.edu.mx.IntegradoraPodec.Model.Employees;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import utez.edu.mx.IntegradoraPodec.Model.Person.PersonBean;
 import utez.edu.mx.IntegradoraPodec.Model.Person.PersonDto;
 import utez.edu.mx.IntegradoraPodec.Model.Rols.RolDto;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+
 public final class EmployeesDto {
 
 
     private final long id;
     private final String email;
     private final Long count;
-
+    private final String token ;
     private PersonDto personDto;
     private RolDto rolDto;
+
+    public EmployeesDto(Long id , String  email , String token ) {
+        this.count = 0L;
+        this.email = email;
+        this.id = id;
+        this.token = token;
+    }
 
     public EmployeesDto(Long count) {
         this.count = count;
         email = null;
         id = 0;
+        token = null;
     }
 
     public EmployeesDto(Long id , String name, String email, String lastname,Long count) {
@@ -28,6 +39,7 @@ public final class EmployeesDto {
         this.id = id;
         this.personDto = new PersonDto(name , lastname);
 
+        token = null;
     }
     public EmployeesDto(Long id , String name, String email, String lastname,int count) {
         this.count = (long) count;
@@ -35,6 +47,7 @@ public final class EmployeesDto {
         this.id = id;
         this.personDto = new PersonDto(name , lastname);
 
+        token = null;
     }
 
     public EmployeesDto(Long id , String name, String email, String lastname, String type, String urlPhoto , String phone, String status) {
@@ -43,6 +56,7 @@ public final class EmployeesDto {
         this.personDto = new PersonDto(name,lastname, status,urlPhoto,phone);
         this.rolDto = new RolDto(type);
         this.count = null;
+        token = null;
     }
 
     public EmployeesDto(Long id , String name, String lastname, String type, String urlPhoto ) {
@@ -51,6 +65,7 @@ public final class EmployeesDto {
         this.rolDto = new RolDto(type);
         this.count = null;
         email = null;
+        token = null;
     }
 
     public EmployeesDto(Long id , String name,  String email,String lastname,String type, String urlPhoto , String phone, String status,String sex) {
@@ -59,6 +74,7 @@ public final class EmployeesDto {
         this.personDto = new PersonDto(name,lastname, status,urlPhoto,phone,sex);
         this.rolDto = new RolDto(type);
         this.count = null;
+        token = null;
     }
 
     public long id() {

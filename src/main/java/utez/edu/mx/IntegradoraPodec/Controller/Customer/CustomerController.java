@@ -23,16 +23,17 @@ public class CustomerController {
     }
 
     //Leer
-    @GetMapping("/read{id}")
-    public ResponseEntity<ApiResponse> getById(@PathVariable Long id) {
-        return service.findById(id);
+    @PostMapping("/read")
+    public ResponseEntity<ApiResponse> getById(@RequestBody CustomerDto dto) {
+        return service.findById(dto.getId());
+
     }
 
     //Actualizar
     @PutMapping("/update")
     public ResponseEntity<ApiResponse> update
-    (@RequestBody CustomerDto dto){
-        return service.update(dto.toEntityId());
+    (@ModelAttribute  CustomerPerson dto){
+        return service.update(dto.toEntityId() , dto.toFile());
     }
 
     //Leer general

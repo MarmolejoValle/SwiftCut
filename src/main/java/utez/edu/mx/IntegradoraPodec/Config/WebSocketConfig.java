@@ -17,7 +17,6 @@ import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
 import java.time.LocalTime;
 
-@Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig  implements WebSocketMessageBrokerConfigurer {
     @Override

@@ -25,13 +25,13 @@ public interface EmployeesRepository extends JpaRepository<EmployeesBean,Long> {
     Optional<EmployeesBean> findByEmailAndAndPassword(String email , String password);
     @Query("""
                    SELECT new utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesDto(count(o.id) ) from EmployeesBean e inner join OrderBean o on e.id = o.employeesBean.id INNER JOIN 
-                   StatusBean s on o.statusBean.id = 1 where e.id= :id
+                   StatusBean s on o.statusBean.id = 1 and o.statusBean.id = s.id where e.id= :id
                    """)
     Optional<EmployeesDto> getCountOrdens(@Param("id") Long id);
 
     @Query("""
                    SELECT new utez.edu.mx.IntegradoraPodec.Model.Order.OrdenDto(o.priceKgBean.priceSale , o.dateRequest) from EmployeesBean e inner join OrderBean o on e.id = o.employeesBean.id 
-                   INNER JOIN StatusBean s on o.statusBean.id = 1 
+                   INNER JOIN StatusBean s on o.statusBean.id = 1 and o.statusBean.id = s.id
                    INNER join PriceKgBean p on p.id = o.priceKgBean.id where e.id= :id 
                    """)
     List<OrdenDto> findByOrderBeansOrderById(@Param("id") Long id);
@@ -68,6 +68,7 @@ public interface EmployeesRepository extends JpaRepository<EmployeesBean,Long> {
             WHERE NOT EXISTS (
                 SELECT 1
                 FROM OrderBean o
+                INNER JOIN StatusBean s ON s.id = o.statusBean.id AND s.id != 1 and s.id != 3 and s.id != 4
                 WHERE o.employeesBean.id = e.id
             )
             """)

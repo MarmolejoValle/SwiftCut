@@ -12,6 +12,7 @@ import utez.edu.mx.IntegradoraPodec.Model.Cards_items.CarsItemsBean;
 import utez.edu.mx.IntegradoraPodec.Model.Cards_items.CardsItemsRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Cart_Shop.CarShopBean;
 import utez.edu.mx.IntegradoraPodec.Model.Cart_Shop.CartShopRepository;
+import utez.edu.mx.IntegradoraPodec.Model.Order_Item.OrderItemBean;
 import utez.edu.mx.IntegradoraPodec.Model.ProductExtras.ProductExtrasBean;
 import utez.edu.mx.IntegradoraPodec.Model.ProductExtras.ProductExtrasRepository;
 
@@ -51,9 +52,9 @@ public class CardsItemsService{
     public ResponseEntity<ApiResponse> deleteById(Long id) {
         Optional<CarsItemsBean> opt = repository.findById(id);
         if (opt.isPresent()){
-            repository.deleteById(id);
-            return  new ResponseEntity<>(new ApiResponse(HttpStatus.OK, false, "Articulo del carrito  eliminado"), HttpStatus.OK);
-        }
+            repository.delete(opt.get());
+            return new ResponseEntity<>(new ApiResponse(
+                    "",HttpStatus.OK,"Articulo eliminado  del carrito creado"),HttpStatus.OK);        }
         return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Articulo del carrito no existente"), HttpStatus.NOT_FOUND);
     }
 
@@ -83,10 +84,16 @@ public class CardsItemsService{
     // UPDATE
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse> update(CarsItemsBean objects){
-        Optional<CarsItemsBean>foundObject = repository.findById(objects.getId());
-        if (foundObject.isPresent())
-            return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(objects),HttpStatus.OK,"Articulo del carrito actualizado"), HttpStatus.OK);
-        return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true, "Articulo del carrito invalido"),HttpStatus.BAD_REQUEST);
+        System.out.println("ID : " + objects.getId());
+        Optional<CarsItemsBean> foundObject = repository.findById(objects.getId());
+        if (foundObject.isPresent()) {
+            foundObject.get().setQuantity(objects.getQuantity());
+            repository.saveAndFlush(foundObject.get());
+            return new ResponseEntity<>(new ApiResponse("", HttpStatus.OK, "Articulo de orden actualizado"),
+                    HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ApiResponse((HttpStatus.BAD_REQUEST), true,
+                "Articulo de orden no encontrado"),HttpStatus.BAD_REQUEST);
     }
 
 

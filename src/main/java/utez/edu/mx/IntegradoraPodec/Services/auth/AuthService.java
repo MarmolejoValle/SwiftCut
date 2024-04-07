@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import utez.edu.mx.IntegradoraPodec.Config.ApiResponse;
 import utez.edu.mx.IntegradoraPodec.Model.Customers.CustomersBean;
 import utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesBean;
+import utez.edu.mx.IntegradoraPodec.Model.Employees.EmployeesDto;
 import utez.edu.mx.IntegradoraPodec.Services.Customer.CustomerService;
 import utez.edu.mx.IntegradoraPodec.Services.Employees.EmployeesService;
 import utez.edu.mx.IntegradoraPodec.security.jwt.JwtProvider;
@@ -64,9 +65,10 @@ public class AuthService {
                 String token = provider.generateToken(auth);
                 // Payload - DTO (token, attrs)
 
+            EmployeesDto dto = new EmployeesDto(user.getId(),user.getEmail(),  token);
 
 
-            return new ResponseEntity<>(new ApiResponse(token, HttpStatus.OK,"Token generado"), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse(dto, HttpStatus.OK,"Token generado"), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             String message = "CredentialsMismatch";

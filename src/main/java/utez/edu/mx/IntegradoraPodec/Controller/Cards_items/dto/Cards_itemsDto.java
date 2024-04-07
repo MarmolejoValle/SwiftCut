@@ -13,7 +13,7 @@ import utez.edu.mx.IntegradoraPodec.Model.Customers.CustomersBean;
 public class Cards_itemsDto {
     private Long id;
     private Long idProductExtra;
-    private int quantity;
+    private Float quantity;
     private Long carId;
 
 

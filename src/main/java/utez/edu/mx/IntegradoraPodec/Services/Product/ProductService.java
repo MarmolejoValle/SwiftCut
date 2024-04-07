@@ -19,6 +19,7 @@ import utez.edu.mx.IntegradoraPodec.Model.MovementType.MovementTypeRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Movement_History.MovementHistoryBean;
 import utez.edu.mx.IntegradoraPodec.Model.Movement_History.MovementHistoryRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Person.PersonBean;
+import utez.edu.mx.IntegradoraPodec.Model.Price_Kg.PriceKgRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Product.ProductBean;
 import utez.edu.mx.IntegradoraPodec.Model.Product.ProductDto;
 import utez.edu.mx.IntegradoraPodec.Model.Product.ProductRepository;
@@ -26,6 +27,7 @@ import utez.edu.mx.IntegradoraPodec.Model.ProductExtras.ProductExtrasBean;
 import utez.edu.mx.IntegradoraPodec.Model.ProductExtras.ProductExtrasRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Rols.RolsBean;
 import utez.edu.mx.IntegradoraPodec.Services.Movement_History.MovementHistoryService;
+import utez.edu.mx.IntegradoraPodec.Services.ProductExtras.ProducteExtrasServices;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -43,6 +45,8 @@ public class ProductService {
     private final MovementTypeRepository movementTypeRepository;
     private final MovementHistoryService movementHistoryService;
     private final ProductExtrasRepository productExtrasRepository;
+    private final ProducteExtrasServices producteExtrasServices;
+    private final PriceKgRepository priceKgRepository;
     private FirebaseInitializer firebaseInitializer;
 
     @Transactional(readOnly = true)
@@ -177,14 +181,17 @@ public class ProductService {
             if (object.getQuantity() < 0){
                 typeBean = movementTypeRepository.findById(2L).get();
             }else {
-                typeBean = movementTypeRepository.findById(2L).get();
+                typeBean = movementTypeRepository.findById(1L).get();
             }
 
             MovementHistoryBean movementHistoryBean = new MovementHistoryBean();
             movementHistoryBean.setMovementTypeBean(typeBean);
-            movementHistoryBean.setDate(LocalDateTime.now());
             movementHistoryBean.setQuantity(Float.valueOf(object.getQuantity()));
+            movementHistoryBean.setProductExtrasBean(producteExtrasServices.findProductExtraForProduct(object.getId()));
+            movementHistoryBean.setDate(LocalDateTime.now());
+            movementHistoryBean.setPriceKgBean(priceKgRepository.findById(priceKgRepository.findNullPriceKg().get().getId()).get());
             movementHistoryRepository.save(movementHistoryBean);
+
             foundObjectOp.get().setQuantity(foundObjectOp.get().getQuantity() + object.getQuantity());
             repository.saveAndFlush( foundObjectOp.get());
 
