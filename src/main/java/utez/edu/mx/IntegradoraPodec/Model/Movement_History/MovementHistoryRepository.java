@@ -36,7 +36,7 @@ from MovementHistoryBean mh
     @Query("""
 Select new utez.edu.mx.IntegradoraPodec.Model.Movement_History.GraficsDto(
  mt.type , sum(mh.quantity) ) from MovementHistoryBean mh
-inner join PriceKgBean pk on mh.priceKgBean.id = pk.id
+inner join PriceKgBean pk on mh.priceKgBean.id = pk.id and pk.id = :idPrice
 inner join MovementTypeBean mt on mh.movementTypeBean.id = mt.id
 group by mt.type
 """)

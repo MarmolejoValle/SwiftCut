@@ -1,8 +1,11 @@
 package utez.edu.mx.IntegradoraPodec.Model.Product;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+
 public class ProductDto {
     private final Long id;
     private final String name;

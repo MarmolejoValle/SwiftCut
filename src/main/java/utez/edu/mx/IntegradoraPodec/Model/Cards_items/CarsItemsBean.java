@@ -21,7 +21,7 @@ public class CarsItemsBean {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private int quantity;
+    private Float  quantity;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,15 +32,15 @@ public class CarsItemsBean {
     @JoinColumn(name = "product_extras_fk")
     private ProductExtrasBean productExtrasBean;
 
-    public CarsItemsBean(int quantity) {
+    public CarsItemsBean(Float quantity) {
         this.quantity = quantity;
     }
 
-    public CarsItemsBean(Long id, int quantity) {
+    public CarsItemsBean(Long id, Float quantity) {
         this.id = id;
         this.quantity = quantity;
     }
-    public CarsItemsBean(Long carId , Long idProductExtra, int quantity) {
+    public CarsItemsBean(Long carId , Long idProductExtra, Float quantity) {
         CarShopBean carShopBean = new CarShopBean();
         carShopBean.setId(carId);
         this.carShopBean = carShopBean;

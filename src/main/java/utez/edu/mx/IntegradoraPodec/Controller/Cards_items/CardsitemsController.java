@@ -45,8 +45,8 @@ public class CardsitemsController {
     {return service.getAll();}
 
     //eliminar
-    @DeleteMapping("/delete{id}")
-    public ResponseEntity<ApiResponse> deleteById(@PathVariable Long id){
-        return service.deleteById(id);
+    @PostMapping("/delete")
+    public ResponseEntity<ApiResponse> deleteById(@RequestBody Cards_itemsDto dto){
+        return service.deleteById(dto.getId());
     }
 }

@@ -1,5 +1,6 @@
 package utez.edu.mx.IntegradoraPodec.Model.ProductExtras;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import utez.edu.mx.IntegradoraPodec.Model.Extras.ExtraDto;
 import utez.edu.mx.IntegradoraPodec.Model.Extras.ExtrasBean;
@@ -7,6 +8,8 @@ import utez.edu.mx.IntegradoraPodec.Model.Product.ProductBean;
 import utez.edu.mx.IntegradoraPodec.Model.Product.ProductDto;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+
 public class ProductExtrasDto {
     private final Long id;
     private final ExtraDto extraDto;

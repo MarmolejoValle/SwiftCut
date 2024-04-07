@@ -16,7 +16,12 @@ import utez.edu.mx.IntegradoraPodec.Services.Order.OrderService;
 public class OrderController {
     private final OrderService service;
 
-    //Crear
+
+
+    @PostMapping("/readAllForOrder")
+    public ResponseEntity<ApiResponse> getAllForOrder(@RequestBody OrderDto dto)
+    {return service.getAllForOrder(dto.getId());}
+
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> save(@RequestBody OrderDto dto){
         return  service.save(dto.getIdCarShop() , dto.getLatitue() ,dto.getLongitude());
@@ -38,13 +43,24 @@ public class OrderController {
     @PutMapping("/finish")
     public ResponseEntity<ApiResponse> finish
             (@RequestBody OrderDto dto){
-        return service.finish(dto.getId());
+        return service.finish(dto.toEntityId());
+    }
+    @PutMapping("/refused")
+    public ResponseEntity<ApiResponse> refused
+            (@RequestBody OrderDto dto){
+        return service.refused(dto.toEntityId());
     }
 
     //Leer general
     @GetMapping("/readAll")
     public ResponseEntity<ApiResponse> getAll()
     {return service.getAll();}
+
+    @PostMapping("/readAllForCustomer")
+    public ResponseEntity<ApiResponse> getAll(@RequestBody OrderDto dto)
+    {return service.getAllFastForCustomer(dto.getIdCustomer());}
+
+
     @PostMapping("/readAllForEmployees")
     public ResponseEntity<ApiResponse> getAllForEmlployees(@RequestBody OrderDto dto)
     {return service.getAllForEmployees(dto.getIdEmployee());}

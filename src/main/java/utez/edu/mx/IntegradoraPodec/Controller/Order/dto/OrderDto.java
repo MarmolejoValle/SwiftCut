@@ -22,6 +22,7 @@ public class OrderDto {
     private LocalDate dateDelivered;
     private String direction;
     private Long idEmployee;
+    private Long idCustomer;
 
     private Long idCarShop ;
     private String latitue;

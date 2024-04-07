@@ -12,10 +12,18 @@ import java.util.Optional;
 @Repository
 public interface CustomersRepository extends JpaRepository<CustomersBean,Long> {
 
+
+    @Query("""
+        Select new utez.edu.mx.IntegradoraPodec.Model.Customers.CustomerDto(c.id, p.name , p.lastName , p.urlPhoto , c.email , p.phone , p.sex) from CustomersBean  c
+        inner join  PersonBean p  on p.id = c.personBean.id 
+        where :idCustomer = c.id
+""")
+    Optional<CustomersBean> findByIdFast(@Param("idCustomer") Long idCustomer);
+
     @Query("""
                    SELECT new  utez.edu.mx.IntegradoraPodec.Model.Customers.CustomerDto (c.id , p.name,p.lastName,p.urlPhoto)
                   FROM PersonBean p
-                   inner join CustomersBean c on p.id=c.personBean.id and c.email =:email                 
+                   inner join CustomersBean c on p.id=c.personBean.id and c.email =:email                
                    """)
     Optional<CustomerDto> findByInfo(@Param("email")String username);
     Optional<CustomersBean> findByEmail(String username);
@@ -23,7 +31,7 @@ public interface CustomersRepository extends JpaRepository<CustomersBean,Long> {
     @Query("""
                    SELECT new  utez.edu.mx.IntegradoraPodec.Model.Customers.CustomerDto (c.id , p.name,p.lastName,p.urlPhoto , car.id)
                   FROM PersonBean p
-                   inner join CustomersBean c on p.id=c.personBean.id and c.email =:email      
+                   inner join CustomersBean c on p.id=c.personBean.id and c.email =:email
                    inner join CarShopBean car on car.id = c.carShopBean.id
                    """)
     Optional<CustomerDto> findByEmailLocal(@Param("email")String username);

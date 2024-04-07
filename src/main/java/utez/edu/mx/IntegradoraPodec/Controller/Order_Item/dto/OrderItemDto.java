@@ -10,11 +10,11 @@ import utez.edu.mx.IntegradoraPodec.Model.Order_Item.OrderItemBean;
 @Setter
 public class OrderItemDto {
     private Long id;
-    private int quantity;
+    private Float quantity;
     private double price;
 
     public OrderItemBean toEntity(){
-        return new OrderItemBean(quantity, price);
+        return new OrderItemBean(quantity);
     }
 
     public OrderItemBean toEntityId(){

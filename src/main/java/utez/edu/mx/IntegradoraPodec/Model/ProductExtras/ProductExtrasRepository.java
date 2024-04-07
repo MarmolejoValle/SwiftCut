@@ -24,4 +24,13 @@ inner join ExtrasBean  e on e.id = px.extrasBean.id
 """)
     List<ProductExtrasDto> findByExtras(@Param("idProduct") Long idProduct  );
 
+    @Query("""
+select new  utez.edu.mx.IntegradoraPodec.Model.ProductExtras.ProductExtrasDto(px.id) from ProductExtrasBean px
+inner join ExtrasBean e on px.extrasBean.id = e.id and e.name ='Sin Extras'
+where px.productBean.id =  :idProduct
+""")
+    Optional<ProductExtrasDto> findProductExtrasForProduct (@Param("idProduct") Long idProduct);
+
+
+
 }
