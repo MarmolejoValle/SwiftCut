@@ -36,12 +36,12 @@ public class MainSecurity {
 
             "/api/order/**",
             "/api/cardsitems/**",
-            "/api/customer/**"
+            "/api/customer/**",
             "/api/order/**"
 
 
     };
-    private final UserDetailsServiceImpl service;
+    private UserDetailsServiceImpl service;
 
     public MainSecurity(UserDetailsServiceImpl service) {
         this.service = service;

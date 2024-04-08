@@ -19,6 +19,7 @@ import utez.edu.mx.IntegradoraPodec.Model.ProductExtras.ProductExtrasRepository;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -57,6 +58,11 @@ public class CardsItemsService{
                     "",HttpStatus.OK,"Articulo eliminado  del carrito creado"),HttpStatus.OK);        }
         return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Articulo del carrito no existente"), HttpStatus.NOT_FOUND);
     }
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public void deleteAll(Set<CarsItemsBean> carsItemsBeanSet) {
+
+repository.deleteAllInBatch(carsItemsBeanSet);    }
 
     //SELECT * FROM
     @Transactional(readOnly = true)

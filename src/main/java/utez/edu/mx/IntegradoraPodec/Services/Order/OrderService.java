@@ -119,7 +119,7 @@ public class OrderService {
     }
 
     // CREATE
-    @Transactional(rollbackFor = {SQLException.class})
+    @Transactional(rollbackFor = {SQLException.class} )
     public ResponseEntity<ApiResponse>save(Long idCarShop , String latitue , String longitude){
 
         Optional<CarShopBean> carShopBean = cartShopRepository.findById(idCarShop);
@@ -139,17 +139,15 @@ public class OrderService {
             carsItemsBeanList.forEach(carsItemsBean -> {
                  OrderItemBean itemBean = new OrderItemBean();
                  itemBean.setQuantity(carsItemsBean.getQuantity());
+                 itemBean.setOrderBean(orderBean);
                  itemBean.setProductExtrasBean(carsItemsBean.getProductExtrasBean());
                  itemBean.setPrice(carsItemsBean.getProductExtrasBean().getExtrasBean().getPrice());
                  orderItemBeanSet.add(itemBean);
-                 itemBean.setOrderBean(orderBean);
-
             });
 
             orderBean.setOrderItemBeans(orderItemBeanSet);
+            itemsService.deleteAll(carsItemsBeanList);
             repository.saveAndFlush(orderBean);
-            carShopBean.get().getCarsItemsBeans().removeAll(carsItemsBeanList);
-            cartShopRepository.saveAndFlush(carShopBean.get());
         }
         return new ResponseEntity<>(new ApiResponse(
                 "Correct",HttpStatus.OK,"Order registrada"),HttpStatus.OK);

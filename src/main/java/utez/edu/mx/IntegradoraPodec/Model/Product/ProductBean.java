@@ -40,7 +40,7 @@ public class ProductBean {
     @OneToMany(mappedBy = "productBean",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<ProductExtrasBean> productExtrasBeans;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinColumn(name = "category_fk")
     private CategoryBean categoryBean;
 

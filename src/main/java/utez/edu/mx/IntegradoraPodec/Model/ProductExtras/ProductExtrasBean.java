@@ -28,7 +28,7 @@ public class ProductExtrasBean {
     @OneToMany(mappedBy = "productExtrasBean",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<OrderItemBean> orderItemBeans;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "productExtrasBean",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<CarsItemsBean> carsItemsBeans;
     @JsonIgnore

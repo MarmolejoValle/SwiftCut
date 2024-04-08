@@ -14,6 +14,7 @@ import utez.edu.mx.IntegradoraPodec.Model.Cards_items.CarsItemsBean;
 import utez.edu.mx.IntegradoraPodec.Model.Category.CategoryBean;
 import utez.edu.mx.IntegradoraPodec.Model.Category.CategoryRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Extras.ExtrasBean;
+import utez.edu.mx.IntegradoraPodec.Model.Extras.ExtrasRepository;
 import utez.edu.mx.IntegradoraPodec.Model.MovementType.MovementTypeBean;
 import utez.edu.mx.IntegradoraPodec.Model.MovementType.MovementTypeRepository;
 import utez.edu.mx.IntegradoraPodec.Model.Movement_History.MovementHistoryBean;
@@ -47,6 +48,7 @@ public class ProductService {
     private final ProductExtrasRepository productExtrasRepository;
     private final ProducteExtrasServices producteExtrasServices;
     private final PriceKgRepository priceKgRepository;
+    private final ExtrasRepository extrasRepository;
     private FirebaseInitializer firebaseInitializer;
 
     @Transactional(readOnly = true)
@@ -133,11 +135,11 @@ public class ProductService {
             CategoryBean categoryBean = new CategoryBean();
             categoryBean.setId(id);
 
-        ExtrasBean extrasBean = new ExtrasBean();
-        extrasBean.setId(2L);
+
+
 
         ProductExtrasBean productExtrasBean = new ProductExtrasBean();
-        productExtrasBean.setExtrasBean(extrasBean);
+        productExtrasBean.setExtrasBean( extrasRepository.findById(30L).get());
         productExtrasBean.setProductBean(object);
 
         object.setCategoryBean(categoryBean);

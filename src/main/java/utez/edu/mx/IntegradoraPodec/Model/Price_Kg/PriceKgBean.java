@@ -25,7 +25,7 @@ public class PriceKgBean {
     private Long id;
     @Column(nullable = false)
     private LocalDateTime dateStart;
-    @Column(nullable = false)
+    @Column()
     private LocalDateTime dateEnd;
     @Column()
     private Float priceSale;

@@ -24,11 +24,11 @@ public class CarsItemsBean {
     private Float  quantity;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     @JoinColumn(name = "car_shop_fk")
     private CarShopBean carShopBean;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_extras_fk")
     private ProductExtrasBean productExtrasBean;
 
